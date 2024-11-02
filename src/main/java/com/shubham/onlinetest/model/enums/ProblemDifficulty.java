@@ -1,4 +1,7 @@
 package com.shubham.onlinetest.model.enums;
 
-public class ProblemDiffuculty {
+public enum ProblemDifficulty {
+    EASY,
+    MEDIUM,
+    HARD
 }
