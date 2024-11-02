@@ -12,4 +12,25 @@ public class PathUtils {
 
         return jarFile != null ? jarFile.getParent() : null;
     }
+
+    public static String concatPath(String baseUrl, String... paths) {
+        StringBuilder urlBuilder = new StringBuilder(baseUrl);
+
+        if (!baseUrl.endsWith("/")) {
+            urlBuilder.append("/");
+        }
+
+        for (String path : paths) {
+            if (path != null) {
+                String trimmedPath = path.startsWith("/") ? path.substring(1) : path;
+                urlBuilder.append(trimmedPath);
+
+                if (!trimmedPath.endsWith("/") && !path.equals(paths[paths.length - 1])) {
+                    urlBuilder.append("/");
+                }
+            }
+        }
+
+        return urlBuilder.toString();
+    }
 }

@@ -13,7 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CodeSnippet extends BaseModel {
-    private UUID problemID;
     private Language language;
     private String code;
 }

@@ -7,4 +7,8 @@ public class CodeMapper {
     public static CodeDTO toDto(CodeSnippet code) {
         return new CodeDTO(code.getLanguage(), code.getCode());
     }
+
+    public static CodeSnippet toEntity(CodeDTO codeDto) {
+        return new CodeSnippet(codeDto.getLanguage(), codeDto.getCode());
+    }
 }

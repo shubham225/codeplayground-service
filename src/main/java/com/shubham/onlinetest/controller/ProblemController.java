@@ -1,21 +1,23 @@
 package com.shubham.onlinetest.controller;
 
-import com.shubham.onlinetest.model.dto.ProblemDTO;
-import com.shubham.onlinetest.model.dto.ProblemSummeryDTO;
+import com.shubham.onlinetest.model.dto.CreateProblemDTO;
+import com.shubham.onlinetest.model.result.AppResult;
 import com.shubham.onlinetest.service.ProblemService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.security.Principal;
 import java.util.UUID;
 
 import static com.shubham.onlinetest.controller.RestApi.VERSION;
 
 @RestController
-@RequestMapping(value = VERSION + "problems")
+@RequestMapping(value = VERSION + "/problems")
 public class ProblemController {
     private final ProblemService problemService;
 
     public ProblemController(ProblemService problemService) {
+
         this.problemService = problemService;
     }
 
@@ -23,15 +25,26 @@ public class ProblemController {
             path = "",
             method = RequestMethod.GET
     )
-    public List<ProblemSummeryDTO> getAllProblems() {
-        return problemService.getAllProblemSummery();
+    public ResponseEntity<AppResult> getAllProblems(Principal principal) {
+        String username = principal.getName();
+        return AppResult.success(problemService.getAllProblemSummery(username));
     }
 
     @RequestMapping(
             path = "/{id}",
             method = RequestMethod.GET
     )
-    public ProblemDTO getProblemById(@PathVariable UUID id) {
-        return problemService.getProblemInfoById(id);
+    public ResponseEntity<AppResult> getProblemById(@PathVariable UUID id,
+                                                    Principal principal) {
+        String username = principal.getName();
+        return AppResult.success(problemService.getProblemInfoById(id, username));
+    }
+
+    @RequestMapping(
+            path = "",
+            method = RequestMethod.POST
+    )
+    public ResponseEntity<AppResult> addNewProblem(@RequestBody CreateProblemDTO createRequest) {
+        return AppResult.success(problemService.createProblem(createRequest));
     }
 }

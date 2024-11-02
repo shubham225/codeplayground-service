@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.shubham.onlinetest.controller.RestApi.VERSION;
 
 @RestController
-@RequestMapping(value = VERSION + "files")
+@RequestMapping(value = VERSION + "/files")
 public class FileController {
 }

@@ -1,6 +1,5 @@
 app:
-  settings:
-    home-dir: D:\Temporary\CodingAppData
+  home-dir: D:\Temporary\CodingAppData
 
 spring:
   application:

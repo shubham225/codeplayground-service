@@ -15,15 +15,10 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProblemDTO {
-    private UUID id;
-    private UUID userProblemId;
+public class CreateProblemDTO {
     private String urlCode;
     private String title;
-    private String descriptionMd;
     private ProblemDifficulty difficulty;
-    private ProblemStatus status;
+    private long maxExecutionTime;
     private List<CodeDTO> codeSnippets;
-    private List<Language> languages;
-    private Set<Submission> submissions;
 }

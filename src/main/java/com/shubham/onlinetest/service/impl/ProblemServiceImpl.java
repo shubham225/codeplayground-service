@@ -1,5 +1,7 @@
 package com.shubham.onlinetest.service.impl;
 
+import com.shubham.onlinetest.exception.ProblemNotFoundException;
+import com.shubham.onlinetest.model.dto.CreateProblemDTO;
 import com.shubham.onlinetest.model.dto.ProblemDTO;
 import com.shubham.onlinetest.model.dto.ProblemSummeryDTO;
 import com.shubham.onlinetest.model.entity.Problem;
@@ -32,10 +34,9 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public List<ProblemSummeryDTO> getAllProblemSummery() {
+    public List<ProblemSummeryDTO> getAllProblemSummery(String username) {
         List<Problem> problems = getAllProblems();
-        String userName = "guest";
-        User user = userService.getUserByUsername(userName);
+        User user = userService.getUserByUsername(username);
 
         return problems.stream().map( problem -> {
            UserProblem userProblem = userProblemsService.getUserProblemByUserAndProblemID(user.getId(), problem.getId());
@@ -50,10 +51,10 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public ProblemDTO getProblemInfoById(UUID id) {
+    public ProblemDTO getProblemInfoById(UUID id, String username) {
         Problem problem = getProblemById(id);
-        String userName = "guest";
-        User user = userService.getUserByUsername(userName);
+
+        User user = userService.getUserByUsername(username);
 
         UserProblem userProblem = userProblemsService.getUserProblemByUserAndProblemID(
                 user.getId(),
@@ -68,8 +69,17 @@ public class ProblemServiceImpl implements ProblemService {
         Optional<Problem> problem = problemRepository.findById(id);
 
         if(problem.isEmpty())
-            throw new RuntimeException("Problem Not Found");
+            throw new ProblemNotFoundException("Problem with ID '" + id + "'Not Found");
 
         return problem.get();
+    }
+
+    @Override
+    public ProblemDTO createProblem(CreateProblemDTO problemDTO) {
+        Problem problem = ProblemMapper.toEntity(problemDTO);
+
+        problemRepository.save(problem);
+
+        return ProblemMapper.toDto(problem);
     }
 }
