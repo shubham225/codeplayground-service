@@ -1,16 +1,14 @@
 package com.shubham.onlinetest.model.dto;
 
 import com.shubham.onlinetest.model.enums.Language;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class CodeDTO {
+public class CreateCodeSnippetDTO {
     private Language language;
-    private String code;
+    private String codeSnippet;
+    private String mainCode;
+    private String answerCode;
 }

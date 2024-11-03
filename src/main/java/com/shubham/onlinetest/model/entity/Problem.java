@@ -1,6 +1,7 @@
 package com.shubham.onlinetest.model.entity;
 
 import com.shubham.onlinetest.model.enums.ProblemDifficulty;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
@@ -18,9 +19,9 @@ public class Problem extends BaseModel {
     private String urlCode;
     private String title;
     private ProblemDifficulty difficulty;
-    private String descriptionMdPath;
+    @Column(columnDefinition = "TEXT")
+    private String descriptionMd;
     private String testCasesPath;
-    private String boilerPlateCodePath;
     private Boolean isActive;
     @OneToMany
     private List<CodeSnippet> codeSnippets;

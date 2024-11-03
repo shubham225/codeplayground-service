@@ -16,9 +16,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateProblemDTO {
-    private String urlCode;
     private String title;
+    private String urlCode;
+    private String description;
     private ProblemDifficulty difficulty;
     private long maxExecutionTime;
-    private List<CodeDTO> codeSnippets;
 }

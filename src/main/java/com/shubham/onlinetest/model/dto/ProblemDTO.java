@@ -24,6 +24,5 @@ public class ProblemDTO {
     private ProblemDifficulty difficulty;
     private ProblemStatus status;
     private List<CodeDTO> codeSnippets;
-    private List<Language> languages;
     private Set<Submission> submissions;
 }

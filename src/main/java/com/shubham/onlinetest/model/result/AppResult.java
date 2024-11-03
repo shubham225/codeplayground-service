@@ -34,8 +34,14 @@ public class AppResult {
         return new ResponseEntity<>(appResult, status);
     }
 
-    public static ResponseEntity<AppResult> error(final Object data) {
-        return error(null, data);
+    public static ResponseEntity<AppResult> created(final Object data) {
+        return created(null, data);
+    }
+
+    public static ResponseEntity<AppResult> created(final String msg, final Object data) {
+        HttpStatus status = HttpStatus.CREATED;
+        AppResult appResult =  get(status.value(), msg, data);
+        return new ResponseEntity<>(appResult, status);
     }
 
     public static ResponseEntity<AppResult> error(final String msg, final Object data) {

@@ -1,6 +1,7 @@
 package com.shubham.onlinetest.model.mapper;
 
 import com.shubham.onlinetest.model.dto.CodeDTO;
+import com.shubham.onlinetest.model.dto.CreateCodeSnippetDTO;
 import com.shubham.onlinetest.model.entity.CodeSnippet;
 
 public class CodeMapper {
@@ -8,7 +9,12 @@ public class CodeMapper {
         return new CodeDTO(code.getLanguage(), code.getCode());
     }
 
-    public static CodeSnippet toEntity(CodeDTO codeDto) {
-        return new CodeSnippet(codeDto.getLanguage(), codeDto.getCode());
+    public static CodeSnippet toEntity(CreateCodeSnippetDTO codeDto) {
+        return CodeSnippet.builder()
+                .answerCode(codeDto.getAnswerCode())
+                .mainCode(codeDto.getMainCode())
+                .code(codeDto.getCodeSnippet())
+                .language(codeDto.getLanguage())
+                .build();
     }
 }

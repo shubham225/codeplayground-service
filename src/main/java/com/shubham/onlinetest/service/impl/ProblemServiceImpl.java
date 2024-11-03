@@ -1,13 +1,13 @@
 package com.shubham.onlinetest.service.impl;
 
 import com.shubham.onlinetest.exception.ProblemNotFoundException;
-import com.shubham.onlinetest.model.dto.CreateProblemDTO;
-import com.shubham.onlinetest.model.dto.ProblemDTO;
-import com.shubham.onlinetest.model.dto.ProblemSummeryDTO;
+import com.shubham.onlinetest.model.dto.*;
+import com.shubham.onlinetest.model.entity.CodeSnippet;
 import com.shubham.onlinetest.model.entity.Problem;
 import com.shubham.onlinetest.model.entity.User;
 import com.shubham.onlinetest.model.entity.UserProblem;
 import com.shubham.onlinetest.model.enums.ProblemStatus;
+import com.shubham.onlinetest.model.mapper.CodeMapper;
 import com.shubham.onlinetest.model.mapper.ProblemMapper;
 import com.shubham.onlinetest.model.mapper.ProblemSummeryMapper;
 import com.shubham.onlinetest.repository.ProblemRepository;
@@ -61,7 +61,7 @@ public class ProblemServiceImpl implements ProblemService {
                 problem.getId()
         );
 
-        return ProblemMapper.toDto(problem, problem.getDescriptionMdPath(), userProblem);
+        return ProblemMapper.toDto(problem, problem.getDescriptionMd(), userProblem);
     }
 
     @Override
@@ -77,9 +77,40 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public ProblemDTO createProblem(CreateProblemDTO problemDTO) {
         Problem problem = ProblemMapper.toEntity(problemDTO);
-
         problemRepository.save(problem);
 
         return ProblemMapper.toDto(problem);
+    }
+
+    @Override
+    public IdentifierDTO addCodeSnippet(UUID id, CreateCodeSnippetDTO codeInfoDTO) {
+        Problem problem = getProblemById(id);
+
+        CodeSnippet code = problem.getCodeSnippets()
+                            .stream()
+                            .filter(c -> c.getLanguage() == codeInfoDTO.getLanguage())
+                            .findFirst()
+                            .orElse(null);
+
+        if (code == null) {
+            code = CodeMapper.toEntity(codeInfoDTO);
+            problem.getCodeSnippets().add(code);
+            problem = problemRepository.save(problem);
+            code = problem.getCodeSnippets()
+                    .stream()
+                    .filter(c -> c.getLanguage() == codeInfoDTO.getLanguage())
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        assert code != null;
+        return IdentifierDTO.builder()
+                .id(code.getId())
+                .build();
+    }
+
+    @Override
+    public IdentifierDTO addTestCases(UUID id) {
+        return null;
     }
 }

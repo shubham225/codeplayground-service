@@ -2,7 +2,6 @@ package com.shubham.onlinetest.model.mapper;
 
 import com.shubham.onlinetest.model.dto.CreateProblemDTO;
 import com.shubham.onlinetest.model.dto.ProblemDTO;
-import com.shubham.onlinetest.model.entity.CodeSnippet;
 import com.shubham.onlinetest.model.entity.Problem;
 import com.shubham.onlinetest.model.entity.UserProblem;
 import com.shubham.onlinetest.model.enums.ProblemStatus;
@@ -26,10 +25,6 @@ public class ProblemMapper {
                         .stream()
                         .map(CodeMapper::toDto)
                         .collect(Collectors.toList()))
-                .languages(problem.getCodeSnippets()
-                        .stream()
-                        .map(CodeSnippet::getLanguage)
-                        .collect(Collectors.toList()))
                 .submissions(userProblem.getSubmissions())
                 .build();
     }
@@ -49,10 +44,6 @@ public class ProblemMapper {
                         .stream()
                         .map(CodeMapper::toDto)
                         .collect(Collectors.toList()))
-                .languages(problem.getCodeSnippets()
-                        .stream()
-                        .map(CodeSnippet::getLanguage)
-                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -65,11 +56,9 @@ public class ProblemMapper {
                 .builder()
                 .title(dto.getTitle())
                 .urlCode(dto.getUrlCode())
+                .descriptionMd(dto.getDescription())
                 .difficulty(dto.getDifficulty())
                 .maxExecutionTime(dto.getMaxExecutionTime())
-                .codeSnippets(dto.getCodeSnippets()
-                        .stream()
-                        .map(CodeMapper::toEntity).collect(Collectors.toList()))
                 .build();
     }
 }

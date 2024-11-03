@@ -1,8 +1,6 @@
 package com.shubham.onlinetest.service;
 
-import com.shubham.onlinetest.model.dto.CreateProblemDTO;
-import com.shubham.onlinetest.model.dto.ProblemDTO;
-import com.shubham.onlinetest.model.dto.ProblemSummeryDTO;
+import com.shubham.onlinetest.model.dto.*;
 import com.shubham.onlinetest.model.entity.Problem;
 
 import java.util.List;
@@ -14,4 +12,6 @@ public interface ProblemService {
     public ProblemDTO getProblemInfoById(UUID id, String username);
     public Problem getProblemById(UUID id);
     public ProblemDTO createProblem(CreateProblemDTO problemDTO);
+    public IdentifierDTO addCodeSnippet(UUID id, CreateCodeSnippetDTO codeInfoDTO);
+    public IdentifierDTO addTestCases(UUID id);
 }

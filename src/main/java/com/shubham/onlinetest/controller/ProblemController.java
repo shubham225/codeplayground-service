@@ -1,6 +1,7 @@
 package com.shubham.onlinetest.controller;
 
 import com.shubham.onlinetest.model.dto.CreateProblemDTO;
+import com.shubham.onlinetest.model.dto.CreateCodeSnippetDTO;
 import com.shubham.onlinetest.model.result.AppResult;
 import com.shubham.onlinetest.service.ProblemService;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class ProblemController {
             method = RequestMethod.GET
     )
     public ResponseEntity<AppResult> getAllProblems(Principal principal) {
-        String username = principal.getName();
+        String username = (principal != null) ? principal.getName() : "guest";
         return AppResult.success(problemService.getAllProblemSummery(username));
     }
 
@@ -36,7 +37,7 @@ public class ProblemController {
     )
     public ResponseEntity<AppResult> getProblemById(@PathVariable UUID id,
                                                     Principal principal) {
-        String username = principal.getName();
+        String username = (principal != null) ? principal.getName() : "guest";
         return AppResult.success(problemService.getProblemInfoById(id, username));
     }
 
@@ -45,6 +46,23 @@ public class ProblemController {
             method = RequestMethod.POST
     )
     public ResponseEntity<AppResult> addNewProblem(@RequestBody CreateProblemDTO createRequest) {
-        return AppResult.success(problemService.createProblem(createRequest));
+        return AppResult.created(problemService.createProblem(createRequest));
+    }
+
+    @RequestMapping(
+            path = "/{id}/codeSnippets",
+            method = RequestMethod.POST
+    )
+    public ResponseEntity<AppResult> addCodeSnippet(@PathVariable UUID id,
+                                                    @RequestBody CreateCodeSnippetDTO codeInfoDTO) {
+        return AppResult.created(problemService.addCodeSnippet(id, codeInfoDTO));
+    }
+
+    @RequestMapping(
+            path = "/{id}/testcases",
+            method = RequestMethod.POST
+    )
+    public ResponseEntity<AppResult> addTestCases(@PathVariable UUID id) {
+        return AppResult.created(problemService.addTestCases(id));
     }
 }
