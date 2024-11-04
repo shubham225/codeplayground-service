@@ -10,6 +10,7 @@ import com.shubham.onlinetest.model.enums.ProblemStatus;
 import com.shubham.onlinetest.model.mapper.CodeMapper;
 import com.shubham.onlinetest.model.mapper.ProblemMapper;
 import com.shubham.onlinetest.model.mapper.ProblemSummeryMapper;
+import com.shubham.onlinetest.repository.CodeSnippetRepository;
 import com.shubham.onlinetest.repository.ProblemRepository;
 import com.shubham.onlinetest.service.ProblemService;
 import com.shubham.onlinetest.service.UserProblemsService;
@@ -26,11 +27,13 @@ public class ProblemServiceImpl implements ProblemService {
     private final ProblemRepository problemRepository;
     private final UserService userService;
     private final UserProblemsService userProblemsService;
+    private final CodeSnippetRepository codeSnippetRepository;
 
-    public ProblemServiceImpl(ProblemRepository problemRepository, UserService userService, UserProblemsService userProblemsService) {
+    public ProblemServiceImpl(ProblemRepository problemRepository, UserService userService, UserProblemsService userProblemsService, CodeSnippetRepository codeSnippetRepository) {
         this.problemRepository = problemRepository;
         this.userService = userService;
         this.userProblemsService = userProblemsService;
+        this.codeSnippetRepository = codeSnippetRepository;
     }
 
     @Override
@@ -94,16 +97,11 @@ public class ProblemServiceImpl implements ProblemService {
 
         if (code == null) {
             code = CodeMapper.toEntity(codeInfoDTO);
+            code = codeSnippetRepository.save(code);
             problem.getCodeSnippets().add(code);
             problem = problemRepository.save(problem);
-            code = problem.getCodeSnippets()
-                    .stream()
-                    .filter(c -> c.getLanguage() == codeInfoDTO.getLanguage())
-                    .findFirst()
-                    .orElse(null);
         }
 
-        assert code != null;
         return IdentifierDTO.builder()
                 .id(code.getId())
                 .build();

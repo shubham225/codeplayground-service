@@ -1,17 +1,29 @@
+# Application Properties
 app:
   home-dir: D:\Temporary\CodingAppData
 
-spring:
+# Application Info
+info:
   application:
-    name: online-test
-  datasource:
-    url: jdbc:h2:mem:${HOME:${HOMEDRIVE}}/onlineTestDB;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_UPPER=false;;NON_KEYWORDS=user
-    username: sa
-    password: sa
-    driver-class-name: org.h2.Driver
-  h2:
-    console:
-      enabled: true
+    name: coding-test
+    description: Sample App for Coding Test
+    author: Shubham Shinde
+    version: '@project.version@'
+
+# Server Config
+server:
+  port: 8080
+
+# Spring Security Config
+logging:
+  level:
+    org:
+      springframework: info
+
+# Database Config
+spring:
+  profiles:
+    active: mariadb
   jpa:
     hibernate:
       ddl-auto: update

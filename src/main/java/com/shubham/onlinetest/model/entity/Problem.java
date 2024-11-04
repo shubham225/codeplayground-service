@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class Problem extends BaseModel {
+    @Column(unique = true)
     private String urlCode;
     private String title;
     private ProblemDifficulty difficulty;

@@ -6,6 +6,8 @@ import com.shubham.onlinetest.model.entity.Problem;
 import com.shubham.onlinetest.model.entity.UserProblem;
 import com.shubham.onlinetest.model.enums.ProblemStatus;
 
+import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProblemMapper {
@@ -38,9 +40,10 @@ public class ProblemMapper {
                 .title(problem.getTitle())
                 .urlCode(problem.getUrlCode())
                 .status(ProblemStatus.OPEN)
-                .descriptionMd("")
+                .descriptionMd(problem.getDescriptionMd())
                 .difficulty(problem.getDifficulty())
-                .codeSnippets(problem.getCodeSnippets()
+                .codeSnippets(Optional.ofNullable(problem.getCodeSnippets())
+                        .orElse(Collections.emptyList())
                         .stream()
                         .map(CodeMapper::toDto)
                         .collect(Collectors.toList()))

@@ -1,7 +1,6 @@
 package com.shubham.onlinetest.model.dto;
 
 import com.shubham.onlinetest.model.entity.Submission;
-import com.shubham.onlinetest.model.enums.Language;
 import com.shubham.onlinetest.model.enums.ProblemDifficulty;
 import com.shubham.onlinetest.model.enums.ProblemStatus;
 import lombok.*;
