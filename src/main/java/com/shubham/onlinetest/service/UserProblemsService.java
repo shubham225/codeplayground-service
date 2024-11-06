@@ -1,9 +1,18 @@
 package com.shubham.onlinetest.service;
 
+import com.shubham.onlinetest.model.dto.CodeDTO;
+import com.shubham.onlinetest.model.entity.Submission;
 import com.shubham.onlinetest.model.entity.UserProblem;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface UserProblemsService {
-    public UserProblem getUserProblemByUserAndProblemID(UUID userId, UUID problemID);
+    UserProblem getUserProblemByUserAndProblemID(UUID userId, UUID problemID);
+    UserProblem getUserProblemByID(UUID id);
+    Set<CodeDTO> getLatestUserCode(UUID id);
+    Set<Submission> getSubmissionsByUserProblemId(UUID id);
+
+    UserProblem saveUserProblem(UserProblem userProblem);
 }

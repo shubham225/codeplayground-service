@@ -9,7 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class SubmitReqDTO {
-    private UUID userProblemId;
+    private UUID problemId;
     private String code;
     private Language language;
 }

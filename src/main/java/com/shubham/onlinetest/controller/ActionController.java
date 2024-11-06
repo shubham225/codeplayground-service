@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 import static com.shubham.onlinetest.controller.RestApi.VERSION;
 
 @RestController
@@ -25,8 +27,10 @@ public class ActionController {
             path = "/submit",
             method = RequestMethod.POST
     )
-    public ResponseEntity<AppResult> submitUserCode(@RequestBody SubmitReqDTO submitRequest) {
-        return AppResult.success(actionService.submitAndCompileUserCode(submitRequest));
+    public ResponseEntity<AppResult> submitUserCode(@RequestBody SubmitReqDTO submitRequest,
+                                                    Principal principal) {
+        String username = (principal != null) ? principal.getName() : "guest";
+        return AppResult.success(actionService.submitAndCompileUserCode(submitRequest, username));
     }
 
     @RequestMapping(

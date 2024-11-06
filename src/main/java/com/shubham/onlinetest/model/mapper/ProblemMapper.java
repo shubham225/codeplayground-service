@@ -7,6 +7,7 @@ import com.shubham.onlinetest.model.entity.UserProblem;
 import com.shubham.onlinetest.model.enums.ProblemStatus;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,17 +18,17 @@ public class ProblemMapper {
 
         return ProblemDTO.builder()
                 .id(problem.getId())
-                .userProblemId(userProblem.getId())
+                .userProblemId((userProblem != null) ? userProblem.getId() : null)
                 .title(problem.getTitle())
                 .urlCode(problem.getUrlCode())
-                .status(userProblem.getStatus())
+                .status((userProblem != null) ? userProblem.getStatus() : ProblemStatus.OPEN)
                 .descriptionMd(description)
                 .difficulty(problem.getDifficulty())
                 .codeSnippets(problem.getCodeSnippets()
                         .stream()
                         .map(CodeMapper::toDto)
                         .collect(Collectors.toList()))
-                .submissions(userProblem.getSubmissions())
+                .submissions((userProblem != null) ? userProblem.getSubmissions() : new HashSet<>())
                 .build();
     }
 

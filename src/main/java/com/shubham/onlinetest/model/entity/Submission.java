@@ -12,7 +12,6 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Submission extends BaseModel {
@@ -25,4 +24,9 @@ public class Submission extends BaseModel {
     private Language language;
     private long runtimeInMs;
     private long memoryInBytes;
+
+    public Submission() {
+        date = new Date();
+        status = SubmissionStatus.IN_PROGRESS;
+    }
 }

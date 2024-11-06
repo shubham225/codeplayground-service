@@ -1,6 +1,7 @@
 package com.shubham.onlinetest.service.impl;
 
 import com.shubham.onlinetest.exception.ProblemNotFoundException;
+import com.shubham.onlinetest.exception.UserProblemNotFoundException;
 import com.shubham.onlinetest.model.dto.*;
 import com.shubham.onlinetest.model.entity.CodeSnippet;
 import com.shubham.onlinetest.model.entity.Problem;
@@ -42,7 +43,17 @@ public class ProblemServiceImpl implements ProblemService {
         User user = userService.getUserByUsername(username);
 
         return problems.stream().map( problem -> {
-           UserProblem userProblem = userProblemsService.getUserProblemByUserAndProblemID(user.getId(), problem.getId());
+           UserProblem userProblem = null;
+
+            try {
+                userProblem = userProblemsService.getUserProblemByUserAndProblemID(
+                        user.getId(),
+                        problem.getId()
+                );
+            }catch (UserProblemNotFoundException e) {
+                userProblem = new UserProblem();
+            }
+
            ProblemStatus status = (userProblem != null) ? userProblem.getStatus() : ProblemStatus.OPEN;
            return ProblemSummeryMapper.toDto(problem, status);
         }).collect(Collectors.toList());
@@ -58,11 +69,16 @@ public class ProblemServiceImpl implements ProblemService {
         Problem problem = getProblemById(id);
 
         User user = userService.getUserByUsername(username);
+        UserProblem userProblem = null;
 
-        UserProblem userProblem = userProblemsService.getUserProblemByUserAndProblemID(
-                user.getId(),
-                problem.getId()
-        );
+        try {
+            userProblem = userProblemsService.getUserProblemByUserAndProblemID(
+                    user.getId(),
+                    problem.getId()
+            );
+        }catch (UserProblemNotFoundException e) {
+            userProblem = new UserProblem();
+        }
 
         return ProblemMapper.toDto(problem, problem.getDescriptionMd(), userProblem);
     }
@@ -99,7 +115,7 @@ public class ProblemServiceImpl implements ProblemService {
             code = CodeMapper.toEntity(codeInfoDTO);
             code = codeSnippetRepository.save(code);
             problem.getCodeSnippets().add(code);
-            problem = problemRepository.save(problem);
+            problemRepository.save(problem);
         }
 
         return IdentifierDTO.builder()

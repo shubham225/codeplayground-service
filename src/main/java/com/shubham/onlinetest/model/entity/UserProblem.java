@@ -1,7 +1,6 @@
 package com.shubham.onlinetest.model.entity;
 
 import com.shubham.onlinetest.model.enums.ProblemStatus;
-import com.shubham.onlinetest.model.enums.SubmissionStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
