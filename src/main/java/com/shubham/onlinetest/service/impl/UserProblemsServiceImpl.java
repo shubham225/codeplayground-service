@@ -33,7 +33,10 @@ public class UserProblemsServiceImpl implements UserProblemsService {
     public UserProblem getUserProblemByID(UUID id) {
         Optional<UserProblem> userProblemOptional = userProblemsRepository.findById(id);
 
-        return userProblemOptional.orElseGet(UserProblem::new);
+        if(userProblemOptional.isEmpty())
+            throw new UserProblemNotFoundException("User Problem Doesn't Exists");
+
+        return userProblemOptional.get();
     }
 
     @Override
@@ -56,7 +59,7 @@ public class UserProblemsServiceImpl implements UserProblemsService {
 
     @Override
     public Set<Submission> getSubmissionsByUserProblemId(UUID id) {
-        return getUserProblemByID(id).getSubmissions();
+        return new HashSet<>(getUserProblemByID(id).getSubmissions());
     }
 
     @Override

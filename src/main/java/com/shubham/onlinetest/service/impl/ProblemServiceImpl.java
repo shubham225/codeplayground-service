@@ -113,9 +113,8 @@ public class ProblemServiceImpl implements ProblemService {
 
         if (code == null) {
             code = CodeMapper.toEntity(codeInfoDTO);
+            code.setProblem(problem);
             code = codeSnippetRepository.save(code);
-            problem.getCodeSnippets().add(code);
-            problemRepository.save(problem);
         }
 
         return IdentifierDTO.builder()

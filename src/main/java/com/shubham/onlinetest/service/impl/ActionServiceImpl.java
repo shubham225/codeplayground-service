@@ -1,41 +1,52 @@
 package com.shubham.onlinetest.service.impl;
 
+import com.shubham.onlinetest.exception.SubmissionNotFoundException;
 import com.shubham.onlinetest.exception.UserProblemNotFoundException;
 import com.shubham.onlinetest.model.dto.ActionDTO;
 import com.shubham.onlinetest.model.dto.ExecuteReqDTO;
+import com.shubham.onlinetest.model.dto.SubmissionDTO;
 import com.shubham.onlinetest.model.dto.SubmitReqDTO;
+import com.shubham.onlinetest.model.entity.Problem;
 import com.shubham.onlinetest.model.entity.Submission;
 import com.shubham.onlinetest.model.entity.User;
 import com.shubham.onlinetest.model.entity.UserProblem;
 import com.shubham.onlinetest.model.enums.ProblemStatus;
 import com.shubham.onlinetest.model.enums.SubmissionStatus;
+import com.shubham.onlinetest.model.mapper.SubmissionMapper;
 import com.shubham.onlinetest.repository.SubmissionRepository;
 import com.shubham.onlinetest.service.ActionService;
+import com.shubham.onlinetest.service.ProblemService;
 import com.shubham.onlinetest.service.UserProblemsService;
 import com.shubham.onlinetest.service.UserService;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ActionServiceImpl implements ActionService {
     private final UserProblemsService userProblemsService;
     private final UserService userService;
     private final SubmissionRepository submissionRepository;
+    private final ProblemService problemService;
 
-    public ActionServiceImpl(UserProblemsService userProblemsService, UserService userService, SubmissionRepository submissionRepository) {
+    public ActionServiceImpl(UserProblemsService userProblemsService, UserService userService, SubmissionRepository submissionRepository, ProblemService problemService) {
         this.userProblemsService = userProblemsService;
         this.userService = userService;
         this.submissionRepository = submissionRepository;
+        this.problemService = problemService;
     }
 
     @Override
     public ActionDTO submitAndCompileUserCode(SubmitReqDTO submitRequest, String username) {
         User user = userService.getUserByUsername(username);
+        Problem problem = problemService.getProblemById(submitRequest.getProblemId());
         UserProblem userProblem = null;
 
         try {
             userProblem = userProblemsService.getUserProblemByUserAndProblemID(
                     user.getId(),
-                    submitRequest.getProblemId()
+                    problem.getId()
             );
         }catch (UserProblemNotFoundException e) {
             userProblem = new UserProblem();
@@ -45,23 +56,46 @@ public class ActionServiceImpl implements ActionService {
             userProblem = userProblemsService.saveUserProblem(userProblem);
         }
 
-        Submission submission = new Submission();
+        Submission submission = userProblem.getSubmissions().stream()
+                                .filter(s -> (s.getStatus() == SubmissionStatus.COMPILED
+                                        || s.getStatus() == SubmissionStatus.IN_PROGRESS
+                                        || s.getStatus() == SubmissionStatus.COMPILATION_FAILED))
+                                .findFirst().orElse(new Submission());
+
+        submission.setUserProblem(userProblem);
         submission.setCode(submitRequest.getCode());
         submission.setLanguage(submitRequest.getLanguage());
 
         //TODO: Compile Code and return output
         submission.setStatus(SubmissionStatus.COMPILED);
 
-        submissionRepository.save(submission);
-        userProblem.getSubmissions().add(submission);
-        userProblem = userProblemsService.saveUserProblem(userProblem);
+        submission = submissionRepository.save(submission);
 
-        return new ActionDTO(submission.getId(), submission.getStatus(), "Compiled",null);
+        SubmissionDTO submissionDTO = SubmissionMapper.toDto(submission);
+
+        return new ActionDTO(submission.getId(), submission.getStatus(), "Compiled",submissionDTO);
     }
 
     @Override
     public ActionDTO executeUserCode(ExecuteReqDTO execRequest) {
-        //TODO: Implementation
-        return null;
+        UserProblem userProblem = userProblemsService.getUserProblemByID(execRequest.getUserProblemId());
+        Optional<Submission> submissionOptional = userProblem.getSubmissions()
+                                            .stream()
+                                            .filter(s -> s.getStatus() == SubmissionStatus.COMPILED)
+                                            .findFirst();
+
+        if(submissionOptional.isEmpty())
+            throw new SubmissionNotFoundException("No Compiled Submission Found, Compile the code first");
+
+        Submission submission = submissionOptional.get();
+
+        //TODO: Execute the program and return status
+        submission.setStatus(SubmissionStatus.WRONG_ANSWER);
+
+        submission = submissionRepository.save(submission);
+
+        SubmissionDTO submissionDTO = SubmissionMapper.toDto(submission);
+
+        return new ActionDTO(submission.getId(), submission.getStatus(), "Executed",submissionDTO);
     }
 }

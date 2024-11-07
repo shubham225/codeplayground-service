@@ -1,8 +1,7 @@
 package com.shubham.onlinetest.model.entity;
 
 import com.shubham.onlinetest.model.enums.Language;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -13,6 +12,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CodeSnippet extends BaseModel {
+    @ManyToOne
+    @JoinColumn(name = "problem_id", nullable = false)
+    private Problem problem;
+    @Enumerated(EnumType.ORDINAL)
     private Language language;
     private String code;
     @Column(columnDefinition = "TEXT")

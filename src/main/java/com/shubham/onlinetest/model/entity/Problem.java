@@ -1,11 +1,10 @@
 package com.shubham.onlinetest.model.entity;
 
 import com.shubham.onlinetest.model.enums.ProblemDifficulty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,12 +18,13 @@ public class Problem extends BaseModel {
     @Column(unique = true)
     private String urlCode;
     private String title;
+    @Enumerated(EnumType.ORDINAL)
     private ProblemDifficulty difficulty;
     @Column(columnDefinition = "TEXT")
     private String descriptionMd;
     private String testCasesPath;
     private Boolean isActive;
-    @OneToMany
-    private List<CodeSnippet> codeSnippets;
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
+    private List<CodeSnippet> codeSnippets = new ArrayList<>();
     private long maxExecutionTime;
 }

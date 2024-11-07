@@ -1,13 +1,10 @@
 package com.shubham.onlinetest.model.entity;
 
 import com.shubham.onlinetest.model.enums.ProblemStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -17,13 +14,13 @@ import java.util.UUID;
 public class UserProblem extends BaseModel {
     private UUID userId;
     private UUID problemId;
+    @Enumerated(EnumType.ORDINAL)
     private ProblemStatus status;
 
-    @OneToMany
-    private Set<Submission> submissions;
+    @OneToMany(mappedBy = "userProblem", fetch = FetchType.EAGER)
+    private List<Submission> submissions = new ArrayList<>();
 
     public UserProblem() {
         status = ProblemStatus.OPEN;
-        submissions = new HashSet<>();
     }
 }

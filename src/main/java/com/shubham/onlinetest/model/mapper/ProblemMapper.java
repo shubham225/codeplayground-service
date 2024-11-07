@@ -28,7 +28,9 @@ public class ProblemMapper {
                         .stream()
                         .map(CodeMapper::toDto)
                         .collect(Collectors.toList()))
-                .submissions((userProblem != null) ? userProblem.getSubmissions() : new HashSet<>())
+                .submissions((userProblem != null) ? userProblem.getSubmissions().stream()
+                        .map(SubmissionMapper::toDto)
+                        .collect(Collectors.toSet()) : new HashSet<>())
                 .build();
     }
 
