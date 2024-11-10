@@ -35,6 +35,6 @@ public class UserProblemController {
             method = RequestMethod.GET
     )
     public ResponseEntity<AppResult> getSubmissions(@PathVariable UUID id) {
-        return AppResult.success(userProblemsService.getSubmissionsByUserProblemId(id));
+        return AppResult.success(userProblemsService.getSubmissionDTOByUserProblemId(id));
     }
 }

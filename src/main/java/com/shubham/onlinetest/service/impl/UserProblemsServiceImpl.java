@@ -2,8 +2,10 @@ package com.shubham.onlinetest.service.impl;
 
 import com.shubham.onlinetest.exception.UserProblemNotFoundException;
 import com.shubham.onlinetest.model.dto.CodeDTO;
+import com.shubham.onlinetest.model.dto.SubmissionDTO;
 import com.shubham.onlinetest.model.entity.Submission;
 import com.shubham.onlinetest.model.entity.UserProblem;
+import com.shubham.onlinetest.model.mapper.SubmissionMapper;
 import com.shubham.onlinetest.repository.UserProblemsRepository;
 import com.shubham.onlinetest.service.UserProblemsService;
 import org.springframework.stereotype.Service;
@@ -60,6 +62,14 @@ public class UserProblemsServiceImpl implements UserProblemsService {
     @Override
     public Set<Submission> getSubmissionsByUserProblemId(UUID id) {
         return new HashSet<>(getUserProblemByID(id).getSubmissions());
+    }
+
+    @Override
+    public Set<SubmissionDTO> getSubmissionDTOByUserProblemId(UUID id) {
+        return getUserProblemByID(id).getSubmissions().stream()
+                .map(SubmissionMapper::toDto)
+                .sorted(Comparator.comparing(SubmissionDTO::getDate).reversed())
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

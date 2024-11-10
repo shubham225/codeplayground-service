@@ -7,4 +7,5 @@ public enum SubmissionStatus {
     ACCEPTED,
     TIME_LIMIT_EXCEEDED,
     WRONG_ANSWER,
+    RUNTIME_ERROR
 }

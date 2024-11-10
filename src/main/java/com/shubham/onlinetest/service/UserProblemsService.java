@@ -1,6 +1,7 @@
 package com.shubham.onlinetest.service;
 
 import com.shubham.onlinetest.model.dto.CodeDTO;
+import com.shubham.onlinetest.model.dto.SubmissionDTO;
 import com.shubham.onlinetest.model.entity.Submission;
 import com.shubham.onlinetest.model.entity.UserProblem;
 
@@ -13,6 +14,6 @@ public interface UserProblemsService {
     UserProblem getUserProblemByID(UUID id);
     Set<CodeDTO> getLatestUserCode(UUID id);
     Set<Submission> getSubmissionsByUserProblemId(UUID id);
-
+    Set<SubmissionDTO> getSubmissionDTOByUserProblemId(UUID id);
     UserProblem saveUserProblem(UserProblem userProblem);
 }

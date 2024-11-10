@@ -9,5 +9,4 @@ import java.util.UUID;
 @Setter
 public class ExecuteReqDTO {
     private UUID userProblemId;
-    private UUID submissionId;
 }

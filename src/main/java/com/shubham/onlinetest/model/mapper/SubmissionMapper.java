@@ -10,8 +10,8 @@ public class SubmissionMapper {
                 .userProblemId(submission.getUserProblem().getId())
                 .date(submission.getDate())
                 .language(submission.getLanguage())
-                .memoryInBytes(submission.getMemoryInBytes())
-                .runtimeInMs(submission.getRuntimeInMs())
+                .memory(submission.getMemoryInBytes())
+                .runtime(submission.getRuntimeInMs())
                 .status(submission.getStatus())
                 .build();
     }
