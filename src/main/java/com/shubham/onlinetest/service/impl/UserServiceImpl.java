@@ -7,6 +7,7 @@ import com.shubham.onlinetest.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,6 +22,15 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isEmpty()) throw new UserNotFoundException("User with name '" + username + "' not found");
+
+        return user.get();
+    }
+
+    @Override
+    public User getUserById(UUID id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isEmpty()) throw new UserNotFoundException("User with id '" + id + "' not found");
 
         return user.get();
     }

@@ -23,6 +23,7 @@ public class Problem extends BaseModel {
     @Column(columnDefinition = "TEXT")
     private String descriptionMd;
     private String testCasesPath;
+    private String answerKeyPath;
     private Boolean isActive;
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
     private List<CodeSnippet> codeSnippets = new ArrayList<>();

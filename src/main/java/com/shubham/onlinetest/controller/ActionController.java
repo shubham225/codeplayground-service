@@ -40,4 +40,12 @@ public class ActionController {
     public ResponseEntity<AppResult> executeUserCode(@RequestBody ExecuteReqDTO executeRequest) {
         return AppResult.success(actionService.executeUserCode(executeRequest));
     }
+
+    @RequestMapping(
+            path = "/test",
+            method = RequestMethod.GET
+    )
+    public ResponseEntity<AppResult> testCode() {
+        return AppResult.success(actionService.testCode());
+    }
 }

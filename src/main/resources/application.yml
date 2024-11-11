@@ -1,6 +1,6 @@
 # Application Properties
 app:
-  home-dir: D:\Temporary\CodingAppData
+  home-dir: /mnt/d/Temporary/CodingAppData
 
 # Application Info
 info:

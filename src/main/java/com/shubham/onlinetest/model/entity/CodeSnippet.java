@@ -19,7 +19,7 @@ public class CodeSnippet extends BaseModel {
     private Language language;
     private String code;
     @Column(columnDefinition = "TEXT")
-    private String mainCode;
+    private String driverCode;
     @Column(columnDefinition = "TEXT")
     private String answerCode;
 }
