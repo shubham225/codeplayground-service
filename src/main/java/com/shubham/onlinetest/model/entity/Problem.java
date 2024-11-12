@@ -25,7 +25,7 @@ public class Problem extends BaseModel {
     private String testCasesPath;
     private String answerKeyPath;
     private Boolean isActive;
-    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CodeSnippet> codeSnippets = new ArrayList<>();
     private long maxExecutionTime;
 }

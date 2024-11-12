@@ -3,6 +3,8 @@ package com.shubham.onlinetest.service.impl;
 import com.shubham.onlinetest.model.enums.Language;
 import com.shubham.onlinetest.service.CodeExecutorService;
 import com.shubham.onlinetest.service.model.CodeExecutorResult;
+import com.shubham.onlinetest.service.model.LanguageProperties;
+import com.shubham.onlinetest.utils.PathUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -16,10 +18,26 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class CodeExecutorServiceImpl implements CodeExecutorService {
     @Override
-    public CodeExecutorResult executeCode(String sourceFile, String execDirPath, Language language) {
+    public CodeExecutorResult executeCode(String classFile, String execDirPath, LanguageProperties language) {
         CodeExecutorResult output = null;
+        String action = language.getExecCommand() + " " + classFile;
+
         try {
-            output = executeCodeInDocker("/mnt/d/Temporary/CodingAppData", "openjdk:17", "javac Solution.java && java Solution",true);
+            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,true);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        return output;
+    }
+
+    @Override
+    public CodeExecutorResult compileCode(String sourceFile, String execDirPath, LanguageProperties language) {
+        CodeExecutorResult output = null;
+        String action = language.getCompileCommand() + " " + sourceFile;
+
+        try {
+            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,true);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -34,7 +52,10 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         String output = "";
         List<String> command = new ArrayList<>();
 
-        if (execFromWsl) command.add("wsl");
+        if (execFromWsl) {
+            command.add("wsl");
+            execDirPath = PathUtils.getWslPath(execDirPath);
+        }
         command.add("docker");
         command.add("run");
         command.add("--rm");

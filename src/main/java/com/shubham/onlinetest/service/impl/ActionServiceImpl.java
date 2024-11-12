@@ -112,7 +112,7 @@ public class ActionServiceImpl implements ActionService {
                                                     || s.getStatus() == SubmissionStatus.COMPILATION_FAILED)
                                             .findFirst();
         if(submissionOptional.isEmpty())
-            throw new SubmissionNotFoundException("No Compiled Submission Found, Compile the code first");
+            throw new SubmissionNotFoundException("No Active Submission Found, Submit the code first");
 
         Submission submission = submissionOptional.get();
 
@@ -158,6 +158,7 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public String testCode() {
-        return codeExecutorService.executeCode("","", Language.JAVA).getOutput();
+//        return codeExecutorService.executeCode("","", Language.JAVA).getOutput();
+        return "dummy";
     }
 }

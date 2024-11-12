@@ -3,6 +3,9 @@ package com.shubham.onlinetest.utils;
 import org.springframework.boot.system.ApplicationHome;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 public class PathUtils {
 
@@ -32,5 +35,15 @@ public class PathUtils {
         }
 
         return urlBuilder.toString();
+    }
+
+    public static String getWslPath(String path) {
+        StringBuilder sb = new StringBuilder();
+
+        int index = path.indexOf(':');
+        String mount = "/mnt/" + path.substring(0,index).toLowerCase();
+        String folderPath = path.substring(path.indexOf(':')+1);
+
+        return Paths.get(mount, folderPath).toString().replace("\\", "/");
     }
 }
