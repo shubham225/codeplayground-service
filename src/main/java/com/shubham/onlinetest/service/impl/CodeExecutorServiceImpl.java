@@ -18,9 +18,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class CodeExecutorServiceImpl implements CodeExecutorService {
     @Override
-    public CodeExecutorResult executeCode(String classFile, String execDirPath, LanguageProperties language) {
+    public CodeExecutorResult executeCode(String objectFile, String arguments, String execDirPath, LanguageProperties language) {
         CodeExecutorResult output = null;
-        String action = language.getExecCommand() + " " + classFile;
+        String action = language.getExecCommand() + " " + objectFile + " " + arguments;
 
         try {
             output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,true);
@@ -32,9 +32,9 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
     }
 
     @Override
-    public CodeExecutorResult compileCode(String sourceFile, String execDirPath, LanguageProperties language) {
+    public CodeExecutorResult compileCode(String sourceFile, String arguments, String execDirPath, LanguageProperties language) {
         CodeExecutorResult output = null;
-        String action = language.getCompileCommand() + " " + sourceFile;
+        String action = language.getCompileCommand() + " " + sourceFile + " " + arguments;
 
         try {
             output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,true);
@@ -49,7 +49,7 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
                                                    String compiler,
                                                    String action,
                                                    boolean execFromWsl) throws IOException, InterruptedException {
-        String output = "";
+        List<String> output;
         List<String> command = new ArrayList<>();
 
         if (execFromWsl) {
@@ -73,23 +73,23 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
 
         int exitCode = process.exitValue();
 
-        String stdOutput = readInputStream(process.getInputStream());
-        String stdError = readInputStream(process.getErrorStream());
+        List<String> stdOutput = readInputStream(process.getInputStream());
+        List<String> stdError = readInputStream(process.getErrorStream());
 
         output = (exitCode == 0) ? stdOutput : stdError;
 
         return new CodeExecutorResult(exitCode, output);
     }
 
-    private String readInputStream(InputStream inStream) throws IOException {
+    private List<String> readInputStream(InputStream inStream) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
-        StringBuilder output = new StringBuilder();
+        List<String> output = new ArrayList<>();
         String line;
 
         while ((line = reader.readLine()) != null) {
-            output.append(line).append("\n");
+            output.add(line);
         }
 
-        return output.toString();
+        return output;
     }
 }

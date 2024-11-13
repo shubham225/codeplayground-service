@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CodeExecutorResult {
     private int execResult;
-    private String output;
+    private List<String> output;
 
     public boolean isSuccess() {
         return (execResult == 0);

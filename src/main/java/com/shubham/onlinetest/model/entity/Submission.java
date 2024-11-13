@@ -7,9 +7,8 @@ import lombok.*;
 
 import java.util.Date;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@Getter
+@Setter
 @AllArgsConstructor
 @Entity
 public class Submission extends BaseModel {

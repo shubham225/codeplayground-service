@@ -7,9 +7,8 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
