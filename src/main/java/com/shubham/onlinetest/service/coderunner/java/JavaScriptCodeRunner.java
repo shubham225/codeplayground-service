@@ -5,7 +5,10 @@ import com.shubham.onlinetest.model.enums.SubmissionStatus;
 import com.shubham.onlinetest.service.coderunner.CodeRunner;
 import com.shubham.onlinetest.service.model.CodeRunResult;
 import com.shubham.onlinetest.service.model.LanguageProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Component("Javascript")
 public class JavaScriptCodeRunner implements CodeRunner {
     @Override
     public CodeRunResult validate(String driverCode, String code, String userHome, String testCasePath, String answerKeyPath) {

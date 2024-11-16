@@ -1,5 +1,6 @@
 package com.shubham.onlinetest.model.dto;
 
+import com.shubham.onlinetest.model.enums.Language;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,4 +10,5 @@ import java.util.UUID;
 @Setter
 public class ExecuteReqDTO {
     private UUID userProblemId;
+    private Language language;
 }

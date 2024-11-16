@@ -97,6 +97,10 @@ public class JavaCodeRunner implements CodeRunner {
     }
 
     private String validateOutput(List<String> output, List<String> answerKey) {
-        return "";
+
+        if(output.size() != answerKey.size())
+            return "Something went wrong";
+
+        return "Dummy Failed TestCase";
     }
 }

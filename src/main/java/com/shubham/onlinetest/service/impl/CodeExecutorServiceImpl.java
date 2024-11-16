@@ -23,7 +23,7 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         String action = language.getExecCommand() + " " + objectFile + " " + arguments;
 
         try {
-            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,true);
+            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,false);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -37,7 +37,7 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         String action = language.getCompileCommand() + " " + sourceFile + " " + arguments;
 
         try {
-            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,true);
+            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,false);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -64,7 +64,8 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         command.add(compiler);
         command.add("/bin/bash");
         command.add("-c");
-        command.add("\"cd /app && " + action + "\"");
+//        command.add("cd /app && ls");
+        command.add("cd /app && " + action);
 
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
