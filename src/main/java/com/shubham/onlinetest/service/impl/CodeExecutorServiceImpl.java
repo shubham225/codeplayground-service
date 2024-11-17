@@ -64,7 +64,6 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         command.add(compiler);
         command.add("/bin/bash");
         command.add("-c");
-//        command.add("cd /app && ls");
         command.add("cd /app && " + action);
 
         ProcessBuilder processBuilder = new ProcessBuilder(command);

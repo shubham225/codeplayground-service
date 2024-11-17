@@ -59,6 +59,7 @@ public class ActionServiceImpl implements ActionService {
         User user = userService.getUserByUsername(username);
         Problem problem = problemService.getProblemById(submitRequest.getProblemId());
         UserProblem userProblem = null;
+        Language language = submitRequest.getLanguage();
 
         try {
             userProblem = userProblemsService.getUserProblemByUserAndProblemID(
@@ -74,9 +75,9 @@ public class ActionServiceImpl implements ActionService {
         }
 
         Submission submission = userProblem.getSubmissions().stream()
-                                .filter(s -> (s.getStatus() == SubmissionStatus.COMPILED
+                                .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
                                         || s.getStatus() == SubmissionStatus.IN_PROGRESS
-                                        || s.getStatus() == SubmissionStatus.COMPILATION_FAILED))
+                                        || s.getStatus() == SubmissionStatus.COMPILATION_FAILED) && s.getLanguage() == language))
                                 .findFirst().orElse(new Submission());
 
         submission.setUserProblem(userProblem);
@@ -105,11 +106,12 @@ public class ActionServiceImpl implements ActionService {
     public ActionDTO executeUserCode(ExecuteReqDTO execRequest) {
         String errorMessage = "Success";
         UserProblem userProblem = userProblemsService.getUserProblemByID(execRequest.getUserProblemId());
+        Language language = execRequest.getLanguage();
         Optional<Submission> submissionOptional = userProblem.getSubmissions()
                                             .stream()
-                                            .filter(s -> s.getStatus() == SubmissionStatus.COMPILED
+                                            .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
                                                     || s.getStatus() == SubmissionStatus.IN_PROGRESS
-                                                    || s.getStatus() == SubmissionStatus.COMPILATION_FAILED)
+                                                    || s.getStatus() == SubmissionStatus.COMPILATION_FAILED) && s.getLanguage() == language))
                                             .findFirst();
         if(submissionOptional.isEmpty())
             throw new SubmissionNotFoundException("No Active Submission Found, Submit the code first");
@@ -119,15 +121,16 @@ public class ActionServiceImpl implements ActionService {
 
         Problem problem = problemService.getProblemById(userProblem.getProblemId());
         User user = userService.getUserById(userProblem.getUserId());
-        Language language = submission.getLanguage();
 
         String driverCode = problem.getCodeSnippets().stream().filter(c -> c.getLanguage() == language).findFirst().orElseThrow().getDriverCode();
 
         Path userDirectory = Paths.get(appProperties.getHomeDir(), user.getUsername());
+        Path testCasesPath = Paths.get(appProperties.getHomeDir(), problem.getTestCasesPath());
+        Path answerKeyPath = Paths.get(appProperties.getHomeDir(), problem.getAnswerKeyPath());
 
         CodeRunner codeRunner = codeRunnerFactory.getCodeRunner(getCodeRunnerType(submission.getLanguage()));
         try {
-            CodeRunResult result = codeRunner.validate(driverCode, submission.getCode(), userDirectory.toString(), problem.getTestCasesPath(), problem.getAnswerKeyPath());
+            CodeRunResult result = codeRunner.validate(driverCode, submission.getCode(), userDirectory.toString(), testCasesPath.toString(), answerKeyPath.toString());
             errorMessage = result.getMessage();
             submission.setStatus(result.getStatus());
             submission.setRuntimeInMs(result.getRuntimeInMs());

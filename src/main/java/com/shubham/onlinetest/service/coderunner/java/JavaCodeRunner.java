@@ -14,7 +14,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component("Java")
@@ -33,9 +35,21 @@ public class JavaCodeRunner implements CodeRunner {
         // TODO: Create java files for driver code and user code
         String className = "Driver";
         String solutionClassName = "Solution";
+        String testcasesFile = "testcases.txt";
+        String resultFile = "result.txt";
+
+        String userTestCase = userHome + "/"+ testcasesFile;
+        String resultFilePath = userHome + "/" + resultFile;
 
         FileUtils.createFileWithContents(Paths.get(userHome, (className + ".java")).toString(), driverCode);
         FileUtils.createFileWithContents(Paths.get(userHome, (solutionClassName + ".java")).toString(), code);
+
+        Path testCasesPath = Paths.get(testCasePath);
+        try {
+            Files.copy(testCasesPath, Paths.get(userTestCase), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // TODO: then compile and execute
         CodeExecutorResult output = codeExecutorService.compileCode(className + ".java", "", userHome, getLanguageProperties());
@@ -45,18 +59,21 @@ public class JavaCodeRunner implements CodeRunner {
             result.setMessage("Compilation failed: " + output.getOutput().toString());
             result.setMemoryInBytes(99999);
             result.setRuntimeInMs(99999);
+            deleteDirectory(new File(userHome));
 
             return result;
         }
 
         // TODO: execute will return testcase output
-        output = codeExecutorService.executeCode(className, "", userHome, getLanguageProperties());
+        String arguments = "./" + testcasesFile + " " + "./" + resultFile;
+        output = codeExecutorService.executeCode(className, arguments, userHome, getLanguageProperties());
 
         if (!output.isSuccess()) {
             result.setStatus(SubmissionStatus.RUNTIME_ERROR);
             result.setMessage("Runtime Error: " + output.getOutput().toString());
             result.setMemoryInBytes(99999);
             result.setRuntimeInMs(99999);
+            deleteDirectory(new File(userHome));
 
             return result;
         }
@@ -71,18 +88,36 @@ public class JavaCodeRunner implements CodeRunner {
             throw new RuntimeException(e);
         }
 
-        String failedTestCase = validateOutput(output.getOutput(), answerKey);
+        Path resultFilePath1 = Paths.get(resultFilePath);
 
+        List<String> resultF = new ArrayList<>();
+        try {
+            resultF = Files.readAllLines(resultFilePath1);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> testCases = new ArrayList<>();
+        try {
+            testCases = Files.readAllLines(testCasesPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String failedTestCase = validateOutput(resultF, answerKey, testCases);
+
+        deleteDirectory(new File(userHome));
         if (!failedTestCase.isBlank() && !failedTestCase.isEmpty()) {
             result.setStatus(SubmissionStatus.WRONG_ANSWER);
-            result.setMessage("Test Case failed : " + failedTestCase);
+            result.setMessage("Test Case failed: \n" + failedTestCase);
             result.setMemoryInBytes(99999);
             result.setRuntimeInMs(99999);
+
 
             return result;
         }
 
-        return new CodeRunResult(SubmissionStatus.COMPILATION_FAILED, output.getOutput().toString(), 99999, 99999);
+        return new CodeRunResult(SubmissionStatus.ACCEPTED, "Success", 99999, 99999);
     }
 
     @Override
@@ -96,11 +131,25 @@ public class JavaCodeRunner implements CodeRunner {
                 .build();
     }
 
-    private String validateOutput(List<String> output, List<String> answerKey) {
+    private String validateOutput(List<String> output, List<String> answerKey, List<String> testcases) {
+        if(output.size() != answerKey.size() || output.size() != testcases.size())
+            return (!output.isEmpty()) ? output.get(output.size() - 1) : "Wrong Answer";
 
-        if(output.size() != answerKey.size())
-            return "Something went wrong";
+        for(int i = 0; i < output.size(); i++) {
+            if(!output.get(i).equals(answerKey.get(i))){
+                String[] val = testcases.get(i).split("\\|");
+                return "Test Case: " + val[0] + " " + val[1] + "\nYour Answer: " + output.get(i) + "\nCorrect Answer: " + answerKey.get(i);
+            }
+        }
+        return "";
+    }
 
-        return "Dummy Failed TestCase";
+    void deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                file.delete();
+            }
+        }
     }
 }
