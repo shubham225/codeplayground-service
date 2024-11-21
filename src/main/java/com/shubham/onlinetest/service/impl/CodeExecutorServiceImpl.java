@@ -5,9 +5,11 @@ import com.shubham.onlinetest.service.CodeExecutorService;
 import com.shubham.onlinetest.service.model.CodeExecutorResult;
 import com.shubham.onlinetest.service.model.LanguageProperties;
 import com.shubham.onlinetest.utils.PathUtils;
+import com.sun.management.OperatingSystemMXBean;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.lang.management.ManagementFactory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -66,8 +68,16 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         command.add("-c");
         command.add("cd /app && " + action);
 
+        long startMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        long startTime = System.currentTimeMillis();
+
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
+        long pid = process.pid();
+
+        Process psProcess = new ProcessBuilder("ps", "-p", String.valueOf(pid), "-o", "rss=").start();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(psProcess.getInputStream()));
+        String memoryUsage = reader.readLine().trim();
 
         process.waitFor(1, TimeUnit.MINUTES);
 
@@ -76,9 +86,12 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         List<String> stdOutput = readInputStream(process.getInputStream());
         List<String> stdError = readInputStream(process.getErrorStream());
 
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+
         output = (exitCode == 0) ? stdOutput : stdError;
 
-        return new CodeExecutorResult(exitCode, output);
+        return new CodeExecutorResult(exitCode, output, Integer.parseInt(memoryUsage), elapsedTime);
     }
 
     private List<String> readInputStream(InputStream inStream) throws IOException {

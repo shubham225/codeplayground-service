@@ -32,7 +32,6 @@ public class JavaCodeRunner implements CodeRunner {
         CodeRunResult result = new CodeRunResult();
         result.setStatus(SubmissionStatus.IN_PROGRESS);
 
-        // TODO: Create java files for driver code and user code
         String className = "Driver";
         String solutionClassName = "Solution";
         String testcasesFile = "testcases.txt";
@@ -51,14 +50,13 @@ public class JavaCodeRunner implements CodeRunner {
             throw new RuntimeException(e);
         }
 
-        // TODO: then compile and execute
         CodeExecutorResult output = codeExecutorService.compileCode(className + ".java", "", userHome, getLanguageProperties());
 
         if (!output.isSuccess()) {
             result.setStatus(SubmissionStatus.COMPILATION_FAILED);
-            result.setMessage("Compilation failed: " + output.getOutput().toString());
-            result.setMemoryInBytes(99999);
-            result.setRuntimeInMs(99999);
+            result.setMessage("Compilation failed: \n\n" + output.getOutput().toString());
+            result.setMemoryInBytes(output.getMemoryUsage());
+            result.setRuntimeInMs(output.getExecTime());
             deleteDirectory(new File(userHome));
 
             return result;
@@ -70,9 +68,9 @@ public class JavaCodeRunner implements CodeRunner {
 
         if (!output.isSuccess()) {
             result.setStatus(SubmissionStatus.RUNTIME_ERROR);
-            result.setMessage("Runtime Error: " + output.getOutput().toString());
-            result.setMemoryInBytes(99999);
-            result.setRuntimeInMs(99999);
+            result.setMessage("Runtime Error: \n\n" + output.getOutput().toString());
+            result.setMemoryInBytes(output.getMemoryUsage());
+            result.setRuntimeInMs(output.getExecTime());
             deleteDirectory(new File(userHome));
 
             return result;
@@ -107,17 +105,17 @@ public class JavaCodeRunner implements CodeRunner {
         String failedTestCase = validateOutput(resultF, answerKey, testCases);
 
         deleteDirectory(new File(userHome));
-        if (!failedTestCase.isBlank() && !failedTestCase.isEmpty()) {
+        if (!failedTestCase.isBlank()) {
             result.setStatus(SubmissionStatus.WRONG_ANSWER);
-            result.setMessage("Test Case failed: \n" + failedTestCase);
-            result.setMemoryInBytes(99999);
-            result.setRuntimeInMs(99999);
+            result.setMessage("Test Case failed: \n\n" + failedTestCase);
+            result.setMemoryInBytes(output.getMemoryUsage());
+            result.setRuntimeInMs(output.getExecTime());
 
 
             return result;
         }
 
-        return new CodeRunResult(SubmissionStatus.ACCEPTED, "Success", 99999, 99999);
+        return new CodeRunResult(SubmissionStatus.ACCEPTED, "Success", output.getMemoryUsage(), output.getExecTime());
     }
 
     @Override

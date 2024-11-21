@@ -14,6 +14,8 @@ import java.util.List;
 public class CodeExecutorResult {
     private int execResult;
     private List<String> output;
+    private long memoryUsage;
+    private long execTime;
 
     public boolean isSuccess() {
         return (execResult == 0);
