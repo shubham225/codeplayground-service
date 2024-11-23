@@ -84,17 +84,6 @@ public class ActionServiceImpl implements ActionService {
         submission.setCode(submitRequest.getCode());
         submission.setLanguage(submitRequest.getLanguage());
 
-        //TODO: Compile Code and return output
-//        try {
-//            Thread.sleep(4000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//        errorMessage = "Compiled";
-//        submission.setStatus(SubmissionStatus.COMPILED);
-        // This Function will only Upload the data now
-        // TODO: Change this block to compile code received from user
-
         submission = submissionRepository.save(submission);
 
         SubmissionDTO submissionDTO = SubmissionMapper.toDto(submission);
@@ -158,11 +147,5 @@ public class ActionServiceImpl implements ActionService {
         }
 
         return "Java";
-    }
-
-    @Override
-    public String testCode() {
-//        return codeExecutorService.executeCode("","", Language.JAVA).getOutput();
-        return "dummy";
     }
 }

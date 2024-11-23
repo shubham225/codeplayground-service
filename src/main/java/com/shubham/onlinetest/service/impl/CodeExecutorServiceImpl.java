@@ -1,20 +1,14 @@
 package com.shubham.onlinetest.service.impl;
 
-import com.shubham.onlinetest.model.enums.Language;
 import com.shubham.onlinetest.service.CodeExecutorService;
 import com.shubham.onlinetest.service.model.CodeExecutorResult;
 import com.shubham.onlinetest.service.model.LanguageProperties;
 import com.shubham.onlinetest.utils.PathUtils;
-import com.sun.management.OperatingSystemMXBean;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.lang.management.ManagementFactory;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
