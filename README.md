@@ -1,6 +1,6 @@
-# Coding Test Backend
+# Online Coding Platform Backend
 
-This repository contains the backend for an **online coding test platform**. Built using **Java**, **Spring Boot**, and **Docker**, this backend is designed to securely execute user-submitted code in a safe environment while maintaining a robust and scalable system. The application uses **MariaDB** as the database to store user data, problems, and test results.
+This repository contains the backend for an **online coding platform**. Built using **Java**, **Spring Boot**, and **Docker**, this backend is designed to securely execute user-submitted code in a safe environment while maintaining a robust and scalable system. The application uses **MariaDB** as the database to store user data, problems, and test results.
 
 ---
 
