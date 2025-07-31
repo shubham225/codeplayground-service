@@ -7,6 +7,7 @@ import com.shubham.onlinetest.model.entity.CodeSnippet;
 import com.shubham.onlinetest.model.entity.Problem;
 import com.shubham.onlinetest.model.entity.User;
 import com.shubham.onlinetest.model.entity.UserProblem;
+import com.shubham.onlinetest.model.enums.ProblemDifficulty;
 import com.shubham.onlinetest.model.enums.ProblemStatus;
 import com.shubham.onlinetest.model.mapper.CodeMapper;
 import com.shubham.onlinetest.model.mapper.ProblemMapper;
@@ -41,6 +42,7 @@ public class ProblemServiceImpl implements ProblemService {
     public List<ProblemSummeryDTO> getAllProblemSummery(String username) {
         List<Problem> problems = getAllProblems();
         User user = userService.getUserByUsername(username);
+        problems.add(Problem.builder().title("Three Sum").difficulty(ProblemDifficulty.HARD).urlCode("TST").build());
 
         return problems.stream().map( problem -> {
            UserProblem userProblem = null;

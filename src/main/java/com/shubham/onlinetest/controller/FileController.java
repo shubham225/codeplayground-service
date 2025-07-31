@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.UUID;
+
 import static com.shubham.onlinetest.controller.RestApi.VERSION;
 
 @RestController
@@ -26,8 +28,9 @@ public class FileController {
             method = RequestMethod.POST
     )
     public ResponseEntity<AppResult> uploadFile(@RequestParam("file")MultipartFile file) {
-        FileUploadDTO fileResponse = null;
+        FileUploadDTO fileResponse = FileUploadDTO.builder().id(UUID.randomUUID()).filename("Txt").build();
         try {
+//            throw new RuntimeException("Error in Testing");
             fileResponse = storageService.uploadFile(file);
         }catch (Exception e) {
             return AppResult.error(e.getMessage(), fileResponse);

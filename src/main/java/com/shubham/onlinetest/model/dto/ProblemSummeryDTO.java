@@ -14,6 +14,7 @@ import java.util.UUID;
 public class ProblemSummeryDTO {
     private UUID id;
     private String title;
+    private String summery;
     private String urlCode;
     private ProblemStatus status;
     private ProblemDifficulty difficulty;
