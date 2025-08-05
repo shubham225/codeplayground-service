@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
 public class CreateCodeSnippetDTO {
     private Language language;
     private String codeSnippet;

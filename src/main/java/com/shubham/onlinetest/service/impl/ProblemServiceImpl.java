@@ -44,20 +44,20 @@ public class ProblemServiceImpl implements ProblemService {
         User user = userService.getUserByUsername(username);
         problems.add(Problem.builder().title("Three Sum").difficulty(ProblemDifficulty.HARD).urlCode("TST").build());
 
-        return problems.stream().map( problem -> {
-           UserProblem userProblem = null;
+        return problems.stream().map(problem -> {
+            UserProblem userProblem = null;
 
             try {
                 userProblem = userProblemsService.getUserProblemByUserAndProblemID(
                         user.getId(),
                         problem.getId()
                 );
-            }catch (UserProblemNotFoundException e) {
+            } catch (UserProblemNotFoundException e) {
                 userProblem = new UserProblem();
             }
 
-           ProblemStatus status = (userProblem != null) ? userProblem.getStatus() : ProblemStatus.OPEN;
-           return ProblemSummeryMapper.toDto(problem, status);
+            ProblemStatus status = (userProblem != null) ? userProblem.getStatus() : ProblemStatus.OPEN;
+            return ProblemSummeryMapper.toDto(problem, status);
         }).collect(Collectors.toList());
     }
 
@@ -78,7 +78,7 @@ public class ProblemServiceImpl implements ProblemService {
                     user.getId(),
                     problem.getId()
             );
-        }catch (UserProblemNotFoundException e) {
+        } catch (UserProblemNotFoundException e) {
             userProblem = new UserProblem();
         }
 
@@ -89,7 +89,7 @@ public class ProblemServiceImpl implements ProblemService {
     public Problem getProblemById(UUID id) {
         Optional<Problem> problem = problemRepository.findById(id);
 
-        if(problem.isEmpty())
+        if (problem.isEmpty())
             throw new ProblemNotFoundException("Problem with ID '" + id + "'Not Found");
 
         return problem.get();
@@ -108,10 +108,10 @@ public class ProblemServiceImpl implements ProblemService {
         Problem problem = getProblemById(id);
 
         CodeSnippet code = problem.getCodeSnippets()
-                            .stream()
-                            .filter(c -> c.getLanguage() == codeInfoDTO.getLanguage())
-                            .findFirst()
-                            .orElse(null);
+                .stream()
+                .filter(c -> c.getLanguage() == codeInfoDTO.getLanguage())
+                .findFirst()
+                .orElse(null);
 
         if (code == null) {
             code = CodeMapper.toEntity(codeInfoDTO);

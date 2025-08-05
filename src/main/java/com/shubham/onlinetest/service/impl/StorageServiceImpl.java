@@ -27,9 +27,9 @@ public class StorageServiceImpl implements StorageService {
                 .build());
 
         return FileUploadDTO.builder()
-                    .id(fileData.getId())
-                    .filename(fileData.getName())
-                    .build();
+                .id(fileData.getId())
+                .filename(fileData.getName())
+                .build();
 
     }
 }

@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.shubham</groupId>
 	<artifactId>onlinetest</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>onlinetest</name>
-	<description>A simple app for coding challenges</description>
+	<version>1.0.0</version>
+	<name>CodePlayground_</name>
+	<description>Online Coding Platform Backend</description>
 	<url/>
 	<licenses>
 		<license/>

@@ -5,8 +5,8 @@ app:
 # Application Info
 info:
   application:
-    name: coding-test
-    description: Sample App for Coding Test
+    name: CodePlayground_
+    description: Online Coding Platform Backend
     author: Shubham Shinde
     version: '@project.version@'
 
@@ -17,6 +17,7 @@ server:
 # Spring Security Config
 logging:
   level:
+    root: info
     org:
       springframework: info
 

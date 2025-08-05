@@ -22,17 +22,16 @@ public class FileController {
     public FileController(StorageService storageService) {
         this.storageService = storageService;
     }
-
     @RequestMapping(
             path = "/upload",
             method = RequestMethod.POST
     )
-    public ResponseEntity<AppResult> uploadFile(@RequestParam("file")MultipartFile file) {
+    public ResponseEntity<AppResult> uploadFile(@RequestParam("file") MultipartFile file) {
         FileUploadDTO fileResponse = FileUploadDTO.builder().id(UUID.randomUUID()).filename("Txt").build();
         try {
 //            throw new RuntimeException("Error in Testing");
             fileResponse = storageService.uploadFile(file);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return AppResult.error(e.getMessage(), fileResponse);
         }
 
