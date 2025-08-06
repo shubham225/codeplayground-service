@@ -35,8 +35,8 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/shubham225/coding-test-backend.git
-   cd coding-test-backend
+   git clone https://github.com/shubham225/codeplayground-service.git
+   cd codeplayground-service
    ```
 2. Set up MariaDB:
     - You can use Docker to run MariaDB, or install it locally.
