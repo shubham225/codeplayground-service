@@ -2,7 +2,7 @@ package com.shubham.codeplayground.model.mapper;
 
 import com.shubham.codeplayground.model.dto.CreateProblemDTO;
 import com.shubham.codeplayground.model.dto.ProblemDTO;
-import com.shubham.codeplayground.model.entity.Problem;
+import com.shubham.codeplayground.model.entity.CodingProblem;
 import com.shubham.codeplayground.model.entity.UserProblem;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProblemMapper {
-    public static ProblemDTO toDto(Problem problem, String description, UserProblem userProblem) {
+    public static ProblemDTO toDto(CodingProblem problem, String description, UserProblem userProblem) {
         if (problem == null)
             return null;
 
@@ -34,7 +34,7 @@ public class ProblemMapper {
                 .build();
     }
 
-    public static ProblemDTO toDto(Problem problem) {
+    public static ProblemDTO toDto(CodingProblem problem) {
         if (problem == null)
             return null;
 
@@ -53,18 +53,28 @@ public class ProblemMapper {
                 .build();
     }
 
-    public static Problem toEntity(CreateProblemDTO dto) {
+    public static CodingProblem toEntity(CreateProblemDTO dto) {
         if (dto == null) {
             return null;
         }
 
-        return Problem
-                .builder()
-                .title(dto.getTitle())
-                .urlCode(dto.getUrlCode())
-                .descriptionMd(dto.getDescription())
-                .difficulty(dto.getDifficulty())
-                .maxExecutionTime(dto.getMaxExecutionTime())
-                .build();
+//        return CodingProblem
+//                .builder()
+//                .title(dto.getTitle())
+//                .urlCode(dto.getUrlCode())
+//                .descriptionMd(dto.getDescription())
+//                .difficulty(dto.getDifficulty())
+//                .maxExecutionTime(dto.getMaxExecutionTime())
+//                .build();
+
+        CodingProblem problem = new CodingProblem();
+
+        problem.setTitle(dto.getTitle());
+        problem.setUrlCode(dto.getUrlCode());
+        problem.setDescriptionMd(dto.getDescription());
+        problem.setDifficulty(dto.getDifficulty());
+        problem.setMaxExecutionTime(dto.getMaxExecutionTime());
+
+        return problem;
     }
 }

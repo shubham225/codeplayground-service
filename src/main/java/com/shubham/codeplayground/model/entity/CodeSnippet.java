@@ -13,7 +13,7 @@ import lombok.*;
 public class CodeSnippet extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "problem_id", nullable = false)
-    private Problem problem;
+    private CodingProblem problem;
     @Enumerated(EnumType.ORDINAL)
     private Language language;
     private String code;

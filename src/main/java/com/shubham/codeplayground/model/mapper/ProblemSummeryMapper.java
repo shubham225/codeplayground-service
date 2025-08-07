@@ -1,11 +1,11 @@
 package com.shubham.codeplayground.model.mapper;
 
 import com.shubham.codeplayground.model.dto.ProblemSummeryDTO;
-import com.shubham.codeplayground.model.entity.Problem;
+import com.shubham.codeplayground.model.entity.CodingProblem;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 
 public class ProblemSummeryMapper {
-    public static ProblemSummeryDTO toDto(Problem problem, ProblemStatus status) {
+    public static ProblemSummeryDTO toDto(CodingProblem problem, ProblemStatus status) {
         return ProblemSummeryDTO.builder()
                 .id(problem.getId())
                 .title(problem.getTitle())

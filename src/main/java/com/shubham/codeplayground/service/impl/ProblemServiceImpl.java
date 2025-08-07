@@ -4,7 +4,7 @@ import com.shubham.codeplayground.exception.ProblemNotFoundException;
 import com.shubham.codeplayground.exception.UserProblemNotFoundException;
 import com.shubham.codeplayground.model.dto.*;
 import com.shubham.codeplayground.model.entity.CodeSnippet;
-import com.shubham.codeplayground.model.entity.Problem;
+import com.shubham.codeplayground.model.entity.CodingProblem;
 import com.shubham.codeplayground.model.entity.User;
 import com.shubham.codeplayground.model.entity.UserProblem;
 import com.shubham.codeplayground.model.enums.ProblemDifficulty;
@@ -40,9 +40,16 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public List<ProblemSummeryDTO> getAllProblemSummery(String username) {
-        List<Problem> problems = getAllProblems();
+        List<CodingProblem> problems = getAllProblems();
         User user = userService.getUserByUsername(username);
-        problems.add(Problem.builder().title("Three Sum").difficulty(ProblemDifficulty.HARD).urlCode("TST").build());
+
+//        problems.add(CodingProblem.builder().title("Three Sum").difficulty(ProblemDifficulty.HARD).urlCode("TST").build());
+
+        CodingProblem problem2 = new CodingProblem();
+        problem2.setTitle("Three Sum");
+        problem2.setDifficulty(ProblemDifficulty.HARD);
+        problem2.setUrlCode("TST");
+        problems.add(problem2);
 
         return problems.stream().map(problem -> {
             UserProblem userProblem = null;
@@ -62,13 +69,13 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public List<Problem> getAllProblems() {
+    public List<CodingProblem> getAllProblems() {
         return problemRepository.findAll();
     }
 
     @Override
     public ProblemDTO getProblemInfoById(UUID id, String username) {
-        Problem problem = getProblemById(id);
+        CodingProblem problem = getProblemById(id);
 
         User user = userService.getUserByUsername(username);
         UserProblem userProblem = null;
@@ -86,8 +93,8 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public Problem getProblemById(UUID id) {
-        Optional<Problem> problem = problemRepository.findById(id);
+    public CodingProblem getProblemById(UUID id) {
+        Optional<CodingProblem> problem = problemRepository.findById(id);
 
         if (problem.isEmpty())
             throw new ProblemNotFoundException("Problem with ID '" + id + "'Not Found");
@@ -97,7 +104,8 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public ProblemDTO createProblem(CreateProblemDTO problemDTO) {
-        Problem problem = ProblemMapper.toEntity(problemDTO);
+        // TODO: implement logic to validate and generate problem
+        CodingProblem problem = ProblemMapper.toEntity(problemDTO);
         problemRepository.save(problem);
 
         return ProblemMapper.toDto(problem);
@@ -105,7 +113,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public IdentifierDTO addCodeSnippet(UUID id, CreateCodeSnippetDTO codeInfoDTO) {
-        Problem problem = getProblemById(id);
+        CodingProblem problem = getProblemById(id);
 
         CodeSnippet code = problem.getCodeSnippets()
                 .stream()

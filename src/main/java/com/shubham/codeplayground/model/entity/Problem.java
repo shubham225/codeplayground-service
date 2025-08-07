@@ -1,19 +1,17 @@
 package com.shubham.codeplayground.model.entity;
 
 import com.shubham.codeplayground.model.enums.ProblemDifficulty;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.MappedSuperclass;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-public class Problem extends BaseModel {
+@MappedSuperclass
+public class Problem extends BaseModel{
     @Column(unique = true)
     private String urlCode;
     private String title;
@@ -21,10 +19,5 @@ public class Problem extends BaseModel {
     private ProblemDifficulty difficulty;
     @Column(columnDefinition = "TEXT")
     private String descriptionMd;
-    private String testCasesPath;
-    private String answerKeyPath;
     private Boolean isActive;
-    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<CodeSnippet> codeSnippets = new ArrayList<>();
-    private long maxExecutionTime;
 }

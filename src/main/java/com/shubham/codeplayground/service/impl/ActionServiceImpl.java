@@ -54,7 +54,7 @@ public class ActionServiceImpl implements ActionService {
     public ActionDTO submitAndCompileUserCode(SubmitReqDTO submitRequest, String username) {
         String errorMessage = "Success";
         User user = userService.getUserByUsername(username);
-        Problem problem = problemService.getProblemById(submitRequest.getProblemId());
+        CodingProblem problem = problemService.getProblemById(submitRequest.getProblemId());
         UserProblem userProblem = null;
         Language language = submitRequest.getLanguage();
 
@@ -63,7 +63,7 @@ public class ActionServiceImpl implements ActionService {
                     user.getId(),
                     problem.getId()
             );
-        }catch (UserProblemNotFoundException e) {
+        } catch (UserProblemNotFoundException e) {
             userProblem = new UserProblem();
             userProblem.setUserId(user.getId());
             userProblem.setProblemId(submitRequest.getProblemId());
@@ -72,10 +72,10 @@ public class ActionServiceImpl implements ActionService {
         }
 
         Submission submission = userProblem.getSubmissions().stream()
-                                .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
-                                        || s.getStatus() == SubmissionStatus.IN_PROGRESS
-                                        || s.getStatus() == SubmissionStatus.COMPILATION_FAILED) && s.getLanguage() == language))
-                                .findFirst().orElse(new Submission());
+                .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
+                        || s.getStatus() == SubmissionStatus.IN_PROGRESS
+                        || s.getStatus() == SubmissionStatus.COMPILATION_FAILED) && s.getLanguage() == language))
+                .findFirst().orElse(new Submission());
 
         submission.setUserProblem(userProblem);
         submission.setCode(submitRequest.getCode());
@@ -85,7 +85,7 @@ public class ActionServiceImpl implements ActionService {
 
         SubmissionDTO submissionDTO = SubmissionMapper.toDto(submission);
 
-        return new ActionDTO(submission.getId(), submission.getStatus(), errorMessage,submissionDTO);
+        return new ActionDTO(submission.getId(), submission.getStatus(), errorMessage, submissionDTO);
     }
 
     @Override
@@ -94,18 +94,18 @@ public class ActionServiceImpl implements ActionService {
         UserProblem userProblem = userProblemsService.getUserProblemByID(execRequest.getUserProblemId());
         Language language = execRequest.getLanguage();
         Optional<Submission> submissionOptional = userProblem.getSubmissions()
-                                            .stream()
-                                            .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
-                                                    || s.getStatus() == SubmissionStatus.IN_PROGRESS
-                                                    || s.getStatus() == SubmissionStatus.COMPILATION_FAILED) && s.getLanguage() == language))
-                                            .findFirst();
-        if(submissionOptional.isEmpty())
+                .stream()
+                .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
+                        || s.getStatus() == SubmissionStatus.IN_PROGRESS
+                        || s.getStatus() == SubmissionStatus.COMPILATION_FAILED) && s.getLanguage() == language))
+                .findFirst();
+        if (submissionOptional.isEmpty())
             throw new SubmissionNotFoundException("No Active Submission Found, Submit the code first");
 
         Submission submission = submissionOptional.get();
 
 
-        Problem problem = problemService.getProblemById(userProblem.getProblemId());
+        CodingProblem problem = problemService.getProblemById(userProblem.getProblemId());
         User user = userService.getUserById(userProblem.getUserId());
 
         String driverCode = problem.getCodeSnippets().stream().filter(c -> c.getLanguage() == language).findFirst().orElseThrow().getDriverCode();
@@ -130,7 +130,7 @@ public class ActionServiceImpl implements ActionService {
 
         SubmissionDTO submissionDTO = SubmissionMapper.toDto(submission);
 
-        return new ActionDTO(submission.getId(), submission.getStatus(), errorMessage,submissionDTO);
+        return new ActionDTO(submission.getId(), submission.getStatus(), errorMessage, submissionDTO);
     }
 
     private String getCodeRunnerType(Language language) {
