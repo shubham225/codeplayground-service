@@ -15,9 +15,10 @@ import com.shubham.codeplayground.model.enums.SubmissionStatus;
 import com.shubham.codeplayground.model.mapper.SubmissionMapper;
 import com.shubham.codeplayground.repository.SubmissionRepository;
 import com.shubham.codeplayground.service.*;
+import com.shubham.codeplayground.service.execution.CodeExecutorService;
 import com.shubham.codeplayground.service.model.CodeRunResult;
-import com.shubham.codeplayground.service.coderunner.CodeRunner;
-import com.shubham.codeplayground.service.coderunner.CodeRunnerFactory;
+import com.shubham.codeplayground.service.execution.runner.CodeRunner;
+import com.shubham.codeplayground.service.execution.runner.CodeRunnerFactory;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;

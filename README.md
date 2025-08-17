@@ -14,7 +14,7 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
 > 🧠 This backend powers secure code execution and problem management. Pair it with
 > the [Frontend Repository](https://github.com/shubham225/online-coding-platform-frontend).
 
-## Features
+## ✨ Features
 
 - **Secure Code Execution**: Utilizes **Docker** containers to execute user-submitted code in an isolated and safe
   environment, preventing any malicious code from affecting the system.
@@ -23,7 +23,7 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
 - **Database**: **MariaDB** is used to store and manage user data, coding problems, test results, and more.
 - **Real-Time Results**: Provides real-time feedback to users based on their code execution results.
 
-## Installation
+## 📥 Installation
 
 ### Prerequisites
 
@@ -54,9 +54,9 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
    http://localhost:8080
    ```
 
-## API Endpoints
+## 🌐 API Endpoints
 
-### Problem Management (Admin)
+### 📝 Problem Management (Admin)
 
 - **GET /api/v1/problems**: Get all coding problems
 - **POST /api/v1/problems**: Add a new coding problem
@@ -64,17 +64,17 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
 - **POST /api/v1/problems/{id}/codeSnippets**: add code snippets associated with a problem
 - **POST /api/v1/problems/{id}/testcases**: add testcases for a problem statement
 
-### Code Execution
+### 🚀 Code Execution
 
 - **POST /api/v1/submit**: Upload the code to backend, and submitted code to user problem.
 - **POST /api/v1/execute**: Submit code for execution. The backend will execute the code in a Docker container and
   return the result.
 
-## License
+## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
+## 🙌 Acknowledgments
 
 - Built using [Spring Boot](https://spring.io/projects/spring-boot) and [MariaDB](https://mariadb.org/).
 - Docker is used to securely execute user-submitted code in isolated containers, ensuring a safe and reliable

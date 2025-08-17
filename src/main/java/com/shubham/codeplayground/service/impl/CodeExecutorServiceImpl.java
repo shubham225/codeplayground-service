@@ -1,9 +1,8 @@
 package com.shubham.codeplayground.service.impl;
 
-import com.shubham.codeplayground.service.CodeExecutorService;
+import com.shubham.codeplayground.service.execution.CodeExecutorService;
 import com.shubham.codeplayground.service.model.CodeExecutorResult;
 import com.shubham.codeplayground.service.model.LanguageProperties;
-import com.shubham.codeplayground.utils.PathUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -19,7 +18,7 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         String action = language.getExecCommand() + " " + objectFile + " " + arguments;
 
         try {
-            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,false);
+            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -33,7 +32,7 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         String action = language.getCompileCommand() + " " + sourceFile + " " + arguments;
 
         try {
-            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action,false);
+            output = executeCodeInDocker(execDirPath, language.getDockerImage(), action);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -43,15 +42,9 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
 
     private CodeExecutorResult executeCodeInDocker(String execDirPath,
                                                    String compiler,
-                                                   String action,
-                                                   boolean execFromWsl) throws IOException, InterruptedException {
+                                                   String action) throws IOException, InterruptedException {
         List<String> output;
         List<String> command = new ArrayList<>();
-
-        if (execFromWsl) {
-            command.add("wsl");
-            execDirPath = PathUtils.getWslPath(execDirPath);
-        }
         command.add("docker");
         command.add("run");
         command.add("--rm");

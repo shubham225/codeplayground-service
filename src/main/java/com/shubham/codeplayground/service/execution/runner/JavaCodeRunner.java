@@ -1,11 +1,10 @@
-package com.shubham.codeplayground.service.coderunner.java;
+package com.shubham.codeplayground.service.execution.runner;
 
 import com.shubham.codeplayground.model.enums.Language;
 import com.shubham.codeplayground.model.enums.SubmissionStatus;
-import com.shubham.codeplayground.service.CodeExecutorService;
+import com.shubham.codeplayground.service.execution.CodeExecutorService;
 import com.shubham.codeplayground.service.model.CodeExecutorResult;
 import com.shubham.codeplayground.service.model.CodeRunResult;
-import com.shubham.codeplayground.service.coderunner.CodeRunner;
 import com.shubham.codeplayground.service.model.LanguageProperties;
 import com.shubham.codeplayground.utils.FileUtils;
 import org.springframework.stereotype.Component;
