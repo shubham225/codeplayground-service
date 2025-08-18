@@ -56,7 +56,7 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
 
 ## 🌐 API Endpoints
 
-### 📝 Problem Management (Admin)
+### Problem Management (Admin)
 
 - **GET /api/v1/problems**: Get all coding problems
 - **POST /api/v1/problems**: Add a new coding problem
@@ -64,7 +64,7 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
 - **POST /api/v1/problems/{id}/codeSnippets**: add code snippets associated with a problem
 - **POST /api/v1/problems/{id}/testcases**: add testcases for a problem statement
 
-### 🚀 Code Execution
+### Code Execution
 
 - **POST /api/v1/submit**: Upload the code to backend, and submitted code to user problem.
 - **POST /api/v1/execute**: Submit code for execution. The backend will execute the code in a Docker container and
