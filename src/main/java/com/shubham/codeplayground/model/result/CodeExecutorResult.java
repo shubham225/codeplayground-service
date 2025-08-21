@@ -1,4 +1,4 @@
-package com.shubham.codeplayground.service.model;
+package com.shubham.codeplayground.model.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

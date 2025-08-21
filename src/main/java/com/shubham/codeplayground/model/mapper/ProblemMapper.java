@@ -2,7 +2,7 @@ package com.shubham.codeplayground.model.mapper;
 
 import com.shubham.codeplayground.model.dto.CreateProblemDTO;
 import com.shubham.codeplayground.model.dto.ProblemDTO;
-import com.shubham.codeplayground.model.entity.CodingProblem;
+import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.entity.UserProblem;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 
@@ -20,7 +20,6 @@ public class ProblemMapper {
                 .id(problem.getId())
                 .userProblemId((userProblem != null) ? userProblem.getId() : null)
                 .title(problem.getTitle())
-                .urlCode(problem.getUrlCode())
                 .status((userProblem != null) ? userProblem.getStatus() : ProblemStatus.OPEN)
                 .descriptionMd(description)
                 .difficulty(problem.getDifficulty())
@@ -41,7 +40,6 @@ public class ProblemMapper {
         return ProblemDTO.builder()
                 .id(problem.getId())
                 .title(problem.getTitle())
-                .urlCode(problem.getUrlCode())
                 .status(ProblemStatus.OPEN)
                 .descriptionMd(problem.getDescriptionMd())
                 .difficulty(problem.getDifficulty())
@@ -70,7 +68,6 @@ public class ProblemMapper {
         CodingProblem problem = new CodingProblem();
 
         problem.setTitle(dto.getTitle());
-        problem.setUrlCode(dto.getUrlCode());
         problem.setDescriptionMd(dto.getDescription());
         problem.setDifficulty(dto.getDifficulty());
         problem.setMaxExecutionTime(dto.getMaxExecutionTime());

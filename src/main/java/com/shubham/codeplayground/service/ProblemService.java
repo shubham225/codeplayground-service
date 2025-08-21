@@ -1,7 +1,7 @@
 package com.shubham.codeplayground.service;
 
 import com.shubham.codeplayground.model.dto.*;
-import com.shubham.codeplayground.model.entity.CodingProblem;
+import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 
 import java.util.List;
 import java.util.UUID;

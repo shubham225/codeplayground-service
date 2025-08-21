@@ -7,6 +7,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Getter

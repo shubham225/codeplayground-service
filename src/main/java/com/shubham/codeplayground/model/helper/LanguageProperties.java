@@ -1,4 +1,4 @@
-package com.shubham.codeplayground.service.model;
+package com.shubham.codeplayground.model.helper;
 
 import com.shubham.codeplayground.model.enums.Language;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.Setter;
 public class LanguageProperties {
     Language language;
     String dockerImage;
-    boolean interpretedLang;
+    Boolean interpretedLang;
     String compileCommand;
     String execCommand;
 }

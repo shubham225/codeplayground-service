@@ -2,8 +2,8 @@ package com.shubham.codeplayground.service.execution.runner;
 
 import com.shubham.codeplayground.model.enums.Language;
 import com.shubham.codeplayground.model.enums.SubmissionStatus;
-import com.shubham.codeplayground.service.model.CodeRunResult;
-import com.shubham.codeplayground.service.model.LanguageProperties;
+import com.shubham.codeplayground.model.result.CodeRunResult;
+import com.shubham.codeplayground.model.helper.LanguageProperties;
 import org.springframework.stereotype.Component;
 
 @Component("Javascript")

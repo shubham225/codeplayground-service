@@ -1,23 +1,21 @@
-package com.shubham.codeplayground.model.entity;
+package com.shubham.codeplayground.model.entity.problem;
 
+import com.shubham.codeplayground.model.entity.BaseModel;
 import com.shubham.codeplayground.model.enums.ProblemDifficulty;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @MappedSuperclass
-public class Problem extends BaseModel{
-    @Column(unique = true)
-    private String urlCode;
+public class Problem extends BaseModel {
     private String title;
-    @Enumerated(EnumType.ORDINAL)
-    private ProblemDifficulty difficulty;
     @Column(columnDefinition = "TEXT")
     private String descriptionMd;
+    @Enumerated(EnumType.ORDINAL)
+    private ProblemDifficulty difficulty;
     private Boolean isActive;
 }

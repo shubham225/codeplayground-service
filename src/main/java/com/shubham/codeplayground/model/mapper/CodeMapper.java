@@ -11,7 +11,7 @@ public class CodeMapper {
 
     public static CodeSnippet toEntity(CreateCodeSnippetDTO codeDto) {
         return CodeSnippet.builder()
-                .answerCode(codeDto.getAnswerCode())
+                .solution(codeDto.getAnswerCode())
                 .driverCode(codeDto.getMainCode())
                 .code(codeDto.getCodeSnippet())
                 .language(codeDto.getLanguage())

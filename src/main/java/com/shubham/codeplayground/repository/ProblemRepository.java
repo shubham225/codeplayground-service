@@ -1,6 +1,6 @@
 package com.shubham.codeplayground.repository;
 
-import com.shubham.codeplayground.model.entity.CodingProblem;
+import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

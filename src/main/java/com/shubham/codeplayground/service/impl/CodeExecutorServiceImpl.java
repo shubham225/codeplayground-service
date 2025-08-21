@@ -1,8 +1,8 @@
 package com.shubham.codeplayground.service.impl;
 
 import com.shubham.codeplayground.service.execution.CodeExecutorService;
-import com.shubham.codeplayground.service.model.CodeExecutorResult;
-import com.shubham.codeplayground.service.model.LanguageProperties;
+import com.shubham.codeplayground.model.result.CodeExecutorResult;
+import com.shubham.codeplayground.model.helper.LanguageProperties;
 import org.springframework.stereotype.Service;
 
 import java.io.*;

@@ -4,7 +4,7 @@ import com.shubham.codeplayground.exception.ProblemNotFoundException;
 import com.shubham.codeplayground.exception.UserProblemNotFoundException;
 import com.shubham.codeplayground.model.dto.*;
 import com.shubham.codeplayground.model.entity.CodeSnippet;
-import com.shubham.codeplayground.model.entity.CodingProblem;
+import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.entity.User;
 import com.shubham.codeplayground.model.entity.UserProblem;
 import com.shubham.codeplayground.model.enums.ProblemDifficulty;
@@ -48,7 +48,6 @@ public class ProblemServiceImpl implements ProblemService {
         CodingProblem problem2 = new CodingProblem();
         problem2.setTitle("Three Sum");
         problem2.setDifficulty(ProblemDifficulty.HARD);
-        problem2.setUrlCode("TST");
         problems.add(problem2);
 
         return problems.stream().map(problem -> {

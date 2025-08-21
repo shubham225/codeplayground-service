@@ -16,7 +16,6 @@ import java.util.UUID;
 public class ProblemDTO {
     private UUID id;
     private UUID userProblemId;
-    private String urlCode;
     private String title;
     private String descriptionMd;
     private ProblemDifficulty difficulty;
