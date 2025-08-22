@@ -11,7 +11,7 @@ import java.util.*;
 @ToString(callSuper = true)
 @AllArgsConstructor
 @Entity
-public class UserProblem extends BaseModel {
+public class ActiveProblem extends BaseModel {
     private UUID userId;
     private UUID problemId;
     @Enumerated(EnumType.ORDINAL)
@@ -20,7 +20,7 @@ public class UserProblem extends BaseModel {
     @OneToMany(mappedBy = "userProblem", fetch = FetchType.EAGER)
     private List<Submission> submissions = new ArrayList<>();
 
-    public UserProblem() {
+    public ActiveProblem() {
         status = ProblemStatus.OPEN;
     }
 }

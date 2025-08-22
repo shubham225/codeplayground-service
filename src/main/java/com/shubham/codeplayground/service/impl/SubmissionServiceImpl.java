@@ -28,8 +28,8 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class ActionServiceImpl implements ActionService {
-    private final UserProblemsService userProblemsService;
+public class SubmissionServiceImpl implements SubmissionService {
+    private final ActiveProblemsService activeProblemsService;
     private final UserService userService;
     private final SubmissionRepository submissionRepository;
     private final ProblemService problemService;
@@ -37,13 +37,13 @@ public class ActionServiceImpl implements ActionService {
     private final CodeRunnerFactory codeRunnerFactory;
     private final AppProperties appProperties;
 
-    public ActionServiceImpl(UserProblemsService userProblemsService,
-                             UserService userService,
-                             SubmissionRepository submissionRepository,
-                             ProblemService problemService,
-                             CodeExecutorService codeExecutorService,
-                             CodeRunnerFactory codeRunnerFactory, AppProperties appProperties) {
-        this.userProblemsService = userProblemsService;
+    public SubmissionServiceImpl(ActiveProblemsService activeProblemsService,
+                                 UserService userService,
+                                 SubmissionRepository submissionRepository,
+                                 ProblemService problemService,
+                                 CodeExecutorService codeExecutorService,
+                                 CodeRunnerFactory codeRunnerFactory, AppProperties appProperties) {
+        this.activeProblemsService = activeProblemsService;
         this.userService = userService;
         this.submissionRepository = submissionRepository;
         this.problemService = problemService;
@@ -57,29 +57,29 @@ public class ActionServiceImpl implements ActionService {
         String errorMessage = "Success";
         User user = userService.getUserByUsername(username);
         CodingProblem problem = problemService.getProblemById(submitRequest.getProblemId());
-        UserProblem userProblem = null;
+        ActiveProblem activeProblem = null;
         Language language = submitRequest.getLanguage();
 
         try {
-            userProblem = userProblemsService.getUserProblemByUserAndProblemID(
+            activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(
                     user.getId(),
                     problem.getId()
             );
         } catch (UserProblemNotFoundException e) {
-            userProblem = new UserProblem();
-            userProblem.setUserId(user.getId());
-            userProblem.setProblemId(submitRequest.getProblemId());
-            userProblem.setStatus(ProblemStatus.PENDING);
-            userProblem = userProblemsService.saveUserProblem(userProblem);
+            activeProblem = new ActiveProblem();
+            activeProblem.setUserId(user.getId());
+            activeProblem.setProblemId(submitRequest.getProblemId());
+            activeProblem.setStatus(ProblemStatus.PENDING);
+            activeProblem = activeProblemsService.saveUserProblem(activeProblem);
         }
 
-        Submission submission = userProblem.getSubmissions().stream()
+        Submission submission = activeProblem.getSubmissions().stream()
                 .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
                         || s.getStatus() == SubmissionStatus.IN_PROGRESS
                         || s.getStatus() == SubmissionStatus.COMPILATION_FAILED) && s.getLanguage() == language))
                 .findFirst().orElse(new Submission());
 
-        submission.setUserProblem(userProblem);
+        submission.setActiveProblem(activeProblem);
         submission.setCode(submitRequest.getCode());
         submission.setLanguage(submitRequest.getLanguage());
 
@@ -93,9 +93,9 @@ public class ActionServiceImpl implements ActionService {
     @Override
     public ActionDTO executeUserCode(ExecuteReqDTO execRequest) {
         String errorMessage = "Success";
-        UserProblem userProblem = userProblemsService.getUserProblemByID(execRequest.getUserProblemId());
+        ActiveProblem activeProblem = activeProblemsService.getUserProblemByID(execRequest.getUserProblemId());
         Language language = execRequest.getLanguage();
-        Optional<Submission> submissionOptional = userProblem.getSubmissions()
+        Optional<Submission> submissionOptional = activeProblem.getSubmissions()
                 .stream()
                 .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
                         || s.getStatus() == SubmissionStatus.IN_PROGRESS
@@ -107,8 +107,8 @@ public class ActionServiceImpl implements ActionService {
         Submission submission = submissionOptional.get();
 
 
-        CodingProblem problem = problemService.getProblemById(userProblem.getProblemId());
-        User user = userService.getUserById(userProblem.getUserId());
+        CodingProblem problem = problemService.getProblemById(activeProblem.getProblemId());
+        User user = userService.getUserById(activeProblem.getUserId());
 
         String driverCode = problem.getCodeSnippets().stream().filter(c -> c.getLanguage() == language).findFirst().orElseThrow().getDriverCode();
 

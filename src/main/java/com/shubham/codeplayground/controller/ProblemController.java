@@ -18,7 +18,6 @@ public class ProblemController {
     private final ProblemService problemService;
 
     public ProblemController(ProblemService problemService) {
-
         this.problemService = problemService;
     }
 

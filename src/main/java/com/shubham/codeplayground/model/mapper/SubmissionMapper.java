@@ -7,7 +7,7 @@ public class SubmissionMapper {
     public static SubmissionDTO toDto(Submission submission) {
         return SubmissionDTO.builder()
                 .id(submission.getId())
-                .userProblemId(submission.getUserProblem().getId())
+                .userProblemId(submission.getActiveProblem().getId())
                 .date(submission.getDate())
                 .language(submission.getLanguage())
                 .memory(submission.getMemoryInBytes())

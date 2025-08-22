@@ -3,7 +3,7 @@ package com.shubham.codeplayground.model.mapper;
 import com.shubham.codeplayground.model.dto.CreateProblemDTO;
 import com.shubham.codeplayground.model.dto.ProblemDTO;
 import com.shubham.codeplayground.model.entity.problem.CodingProblem;
-import com.shubham.codeplayground.model.entity.UserProblem;
+import com.shubham.codeplayground.model.entity.ActiveProblem;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 
 import java.util.Collections;
@@ -12,22 +12,22 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProblemMapper {
-    public static ProblemDTO toDto(CodingProblem problem, String description, UserProblem userProblem) {
+    public static ProblemDTO toDto(CodingProblem problem, String description, ActiveProblem activeProblem) {
         if (problem == null)
             return null;
 
         return ProblemDTO.builder()
                 .id(problem.getId())
-                .userProblemId((userProblem != null) ? userProblem.getId() : null)
+                .userProblemId((activeProblem != null) ? activeProblem.getId() : null)
                 .title(problem.getTitle())
-                .status((userProblem != null) ? userProblem.getStatus() : ProblemStatus.OPEN)
+                .status((activeProblem != null) ? activeProblem.getStatus() : ProblemStatus.OPEN)
                 .descriptionMd(description)
                 .difficulty(problem.getDifficulty())
                 .codeSnippets(problem.getCodeSnippets()
                         .stream()
                         .map(CodeMapper::toDto)
                         .collect(Collectors.toList()))
-                .submissions((userProblem != null) ? userProblem.getSubmissions().stream()
+                .submissions((activeProblem != null) ? activeProblem.getSubmissions().stream()
                         .map(SubmissionMapper::toDto)
                         .collect(Collectors.toSet()) : new HashSet<>())
                 .build();

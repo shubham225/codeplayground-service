@@ -6,7 +6,7 @@ import com.shubham.codeplayground.model.dto.*;
 import com.shubham.codeplayground.model.entity.CodeSnippet;
 import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.entity.User;
-import com.shubham.codeplayground.model.entity.UserProblem;
+import com.shubham.codeplayground.model.entity.ActiveProblem;
 import com.shubham.codeplayground.model.enums.ProblemDifficulty;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 import com.shubham.codeplayground.model.mapper.CodeMapper;
@@ -15,7 +15,7 @@ import com.shubham.codeplayground.model.mapper.ProblemSummeryMapper;
 import com.shubham.codeplayground.repository.CodeSnippetRepository;
 import com.shubham.codeplayground.repository.ProblemRepository;
 import com.shubham.codeplayground.service.ProblemService;
-import com.shubham.codeplayground.service.UserProblemsService;
+import com.shubham.codeplayground.service.ActiveProblemsService;
 import com.shubham.codeplayground.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +28,13 @@ import java.util.stream.Collectors;
 public class ProblemServiceImpl implements ProblemService {
     private final ProblemRepository problemRepository;
     private final UserService userService;
-    private final UserProblemsService userProblemsService;
+    private final ActiveProblemsService activeProblemsService;
     private final CodeSnippetRepository codeSnippetRepository;
 
-    public ProblemServiceImpl(ProblemRepository problemRepository, UserService userService, UserProblemsService userProblemsService, CodeSnippetRepository codeSnippetRepository) {
+    public ProblemServiceImpl(ProblemRepository problemRepository, UserService userService, ActiveProblemsService activeProblemsService, CodeSnippetRepository codeSnippetRepository) {
         this.problemRepository = problemRepository;
         this.userService = userService;
-        this.userProblemsService = userProblemsService;
+        this.activeProblemsService = activeProblemsService;
         this.codeSnippetRepository = codeSnippetRepository;
     }
 
@@ -51,18 +51,18 @@ public class ProblemServiceImpl implements ProblemService {
         problems.add(problem2);
 
         return problems.stream().map(problem -> {
-            UserProblem userProblem = null;
+            ActiveProblem activeProblem = null;
 
             try {
-                userProblem = userProblemsService.getUserProblemByUserAndProblemID(
+                activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(
                         user.getId(),
                         problem.getId()
                 );
             } catch (UserProblemNotFoundException e) {
-                userProblem = new UserProblem();
+                activeProblem = new ActiveProblem();
             }
 
-            ProblemStatus status = (userProblem != null) ? userProblem.getStatus() : ProblemStatus.OPEN;
+            ProblemStatus status = (activeProblem != null) ? activeProblem.getStatus() : ProblemStatus.OPEN;
             return ProblemSummeryMapper.toDto(problem, status);
         }).collect(Collectors.toList());
     }
@@ -77,18 +77,18 @@ public class ProblemServiceImpl implements ProblemService {
         CodingProblem problem = getProblemById(id);
 
         User user = userService.getUserByUsername(username);
-        UserProblem userProblem = null;
+        ActiveProblem activeProblem = null;
 
         try {
-            userProblem = userProblemsService.getUserProblemByUserAndProblemID(
+            activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(
                     user.getId(),
                     problem.getId()
             );
         } catch (UserProblemNotFoundException e) {
-            userProblem = new UserProblem();
+            activeProblem = new ActiveProblem();
         }
 
-        return ProblemMapper.toDto(problem, problem.getDescriptionMd(), userProblem);
+        return ProblemMapper.toDto(problem, problem.getDescriptionMd(), activeProblem);
     }
 
     @Override

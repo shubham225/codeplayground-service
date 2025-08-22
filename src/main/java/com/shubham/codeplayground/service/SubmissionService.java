@@ -1,10 +1,10 @@
 package com.shubham.codeplayground.service;
 
-import com.shubham.codeplayground.model.entity.Submission;
-
-import java.util.Set;
-import java.util.UUID;
+import com.shubham.codeplayground.model.dto.ActionDTO;
+import com.shubham.codeplayground.model.dto.ExecuteReqDTO;
+import com.shubham.codeplayground.model.dto.SubmitReqDTO;
 
 public interface SubmissionService {
-    public Set<Submission> getAllSubmissionsByUserAndProblemId(UUID userId, UUID problemId);
+    public ActionDTO submitAndCompileUserCode(SubmitReqDTO submitRequest, String username);
+    public ActionDTO executeUserCode(ExecuteReqDTO execRequest);
 }

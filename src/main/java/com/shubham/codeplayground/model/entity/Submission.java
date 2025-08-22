@@ -14,7 +14,7 @@ import java.util.Date;
 public class Submission extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "user_problem_id", nullable = false)
-    private UserProblem userProblem;
+    private ActiveProblem activeProblem;
     private Date date;
     @Enumerated(EnumType.ORDINAL)
     private SubmissionStatus status;
