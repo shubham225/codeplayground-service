@@ -2,7 +2,7 @@ package com.shubham.codeplayground.service.execution.runner;
 
 import com.shubham.codeplayground.model.enums.Language;
 import com.shubham.codeplayground.model.enums.SubmissionStatus;
-import com.shubham.codeplayground.service.execution.CodeExecutorService;
+import com.shubham.codeplayground.service.execution.executor.CodeExecutorService;
 import com.shubham.codeplayground.model.result.CodeExecutorResult;
 import com.shubham.codeplayground.model.result.CodeRunResult;
 import com.shubham.codeplayground.model.helper.LanguageProperties;
@@ -17,7 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("Java")
+@Component("JAVA")
 public class JavaCodeRunner implements CodeRunner {
     private final CodeExecutorService codeExecutorService;
 

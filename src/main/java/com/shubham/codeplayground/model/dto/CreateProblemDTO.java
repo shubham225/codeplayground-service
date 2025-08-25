@@ -9,9 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateProblemDTO {
-    private String title;
-    private String urlCode;
-    private String description;
+    private String type;
+    private String summery;
     private ProblemDifficulty difficulty;
+    private String descriptionMd;
+    private String[] languages;
+    private CodeStubDTO codeStub;
     private long maxExecutionTime;
 }

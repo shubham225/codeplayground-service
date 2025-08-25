@@ -6,7 +6,7 @@ import com.shubham.codeplayground.model.result.CodeRunResult;
 import com.shubham.codeplayground.model.helper.LanguageProperties;
 import org.springframework.stereotype.Component;
 
-@Component("Javascript")
+@Component("JAVASCRIPT")
 public class JavaScriptCodeRunner implements CodeRunner {
     @Override
     public CodeRunResult validate(String driverCode, String code, String userHome, String testCasePath, String answerKeyPath) {

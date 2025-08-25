@@ -7,16 +7,19 @@ import com.shubham.codeplayground.model.entity.CodeSnippet;
 import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.entity.User;
 import com.shubham.codeplayground.model.entity.ActiveProblem;
+import com.shubham.codeplayground.model.entity.problem.Problem;
 import com.shubham.codeplayground.model.enums.ProblemDifficulty;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 import com.shubham.codeplayground.model.mapper.CodeMapper;
 import com.shubham.codeplayground.model.mapper.ProblemMapper;
 import com.shubham.codeplayground.model.mapper.ProblemSummeryMapper;
 import com.shubham.codeplayground.repository.CodeSnippetRepository;
-import com.shubham.codeplayground.repository.ProblemRepository;
+import com.shubham.codeplayground.repository.CodingProblemRepository;
 import com.shubham.codeplayground.service.ProblemService;
 import com.shubham.codeplayground.service.ActiveProblemsService;
 import com.shubham.codeplayground.service.UserService;
+import com.shubham.codeplayground.service.generators.problem.ProblemGenerator;
+import com.shubham.codeplayground.service.generators.problem.ProblemGeneratorFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,16 +29,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProblemServiceImpl implements ProblemService {
-    private final ProblemRepository problemRepository;
+    private final CodingProblemRepository codingProblemRepository;
     private final UserService userService;
     private final ActiveProblemsService activeProblemsService;
     private final CodeSnippetRepository codeSnippetRepository;
+    private final ProblemGeneratorFactory problemGeneratorFactory;
 
-    public ProblemServiceImpl(ProblemRepository problemRepository, UserService userService, ActiveProblemsService activeProblemsService, CodeSnippetRepository codeSnippetRepository) {
-        this.problemRepository = problemRepository;
+    public ProblemServiceImpl(CodingProblemRepository codingProblemRepository, UserService userService, ActiveProblemsService activeProblemsService, CodeSnippetRepository codeSnippetRepository, ProblemGeneratorFactory problemGeneratorFactory) {
+        this.codingProblemRepository = codingProblemRepository;
         this.userService = userService;
         this.activeProblemsService = activeProblemsService;
         this.codeSnippetRepository = codeSnippetRepository;
+        this.problemGeneratorFactory = problemGeneratorFactory;
     }
 
     @Override
@@ -69,7 +74,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public List<CodingProblem> getAllProblems() {
-        return problemRepository.findAll();
+        return codingProblemRepository.findAll();
     }
 
     @Override
@@ -93,7 +98,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public CodingProblem getProblemById(UUID id) {
-        Optional<CodingProblem> problem = problemRepository.findById(id);
+        Optional<CodingProblem> problem = codingProblemRepository.findById(id);
 
         if (problem.isEmpty())
             throw new ProblemNotFoundException("Problem with ID '" + id + "'Not Found");
@@ -104,10 +109,12 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public ProblemDTO createProblem(CreateProblemDTO problemDTO) {
         // TODO: implement logic to validate and generate problem
-        CodingProblem problem = ProblemMapper.toEntity(problemDTO);
-        problemRepository.save(problem);
+        ProblemGenerator problemGenerator = problemGeneratorFactory.getProblemGenerator("CODING");
 
-        return ProblemMapper.toDto(problem);
+        //Generate will also save the record in tables
+        Problem problem = problemGenerator.generate(problemDTO);
+
+        return ProblemMapper.toDto((CodingProblem) problem);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.shubham.codeplayground.service.execution;
+package com.shubham.codeplayground.service.execution.executor;
 
 import com.shubham.codeplayground.model.result.CodeExecutorResult;
 import com.shubham.codeplayground.model.helper.LanguageProperties;

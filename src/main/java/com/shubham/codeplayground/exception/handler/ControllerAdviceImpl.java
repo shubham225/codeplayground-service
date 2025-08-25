@@ -1,5 +1,6 @@
 package com.shubham.codeplayground.exception.handler;
 
+import com.shubham.codeplayground.exception.InvalidTestcaseFormatException;
 import com.shubham.codeplayground.exception.ProblemNotFoundException;
 import com.shubham.codeplayground.exception.UserNotFoundException;
 import com.shubham.codeplayground.model.dto.ExceptionDTO;
@@ -27,6 +28,16 @@ public class ControllerAdviceImpl {
     public ResponseEntity<AppResult> handleMaxSizeException(Exception exception, HttpServletRequest request) {
         ExceptionDTO error = new ExceptionDTO(exception, request);
         HttpStatus status = HttpStatus.PAYLOAD_TOO_LARGE;
+
+        error.setStatus(status.toString());
+
+        return AppResult.error(exception.getMessage(), error);
+    }
+
+    @ExceptionHandler(InvalidTestcaseFormatException.class)
+    public ResponseEntity<AppResult> handleBadRequest(Exception exception, HttpServletRequest request) {
+        ExceptionDTO error = new ExceptionDTO(exception, request);
+        HttpStatus status = HttpStatus.BAD_REQUEST;
 
         error.setStatus(status.toString());
 
