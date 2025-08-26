@@ -45,12 +45,10 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public List<ProblemSummeryDTO> getAllProblemSummery(String username) {
-        List<CodingProblem> problems = getAllProblems();
+        List<Problem> problems = getAllProblems();
         User user = userService.getUserByUsername(username);
 
-//        problems.add(CodingProblem.builder().title("Three Sum").difficulty(ProblemDifficulty.HARD).urlCode("TST").build());
-
-        CodingProblem problem2 = new CodingProblem();
+        Problem problem2 = new Problem();
         problem2.setTitle("Three Sum");
         problem2.setDifficulty(ProblemDifficulty.HARD);
         problems.add(problem2);
@@ -59,10 +57,7 @@ public class ProblemServiceImpl implements ProblemService {
             ActiveProblem activeProblem = null;
 
             try {
-                activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(
-                        user.getId(),
-                        problem.getId()
-                );
+                activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(user.getId(), problem.getId());
             } catch (UserProblemNotFoundException e) {
                 activeProblem = new ActiveProblem();
             }
@@ -73,8 +68,8 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public List<CodingProblem> getAllProblems() {
-        return codingProblemRepository.findAll();
+    public List<Problem> getAllProblems() {
+        return codingProblemRepository.findAll().stream().map(codingProblem -> (Problem) codingProblem).toList();
     }
 
     @Override
@@ -85,10 +80,7 @@ public class ProblemServiceImpl implements ProblemService {
         ActiveProblem activeProblem = null;
 
         try {
-            activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(
-                    user.getId(),
-                    problem.getId()
-            );
+            activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(user.getId(), problem.getId());
         } catch (UserProblemNotFoundException e) {
             activeProblem = new ActiveProblem();
         }
@@ -100,8 +92,7 @@ public class ProblemServiceImpl implements ProblemService {
     public CodingProblem getProblemById(UUID id) {
         Optional<CodingProblem> problem = codingProblemRepository.findById(id);
 
-        if (problem.isEmpty())
-            throw new ProblemNotFoundException("Problem with ID '" + id + "'Not Found");
+        if (problem.isEmpty()) throw new ProblemNotFoundException("Problem with ID '" + id + "'Not Found");
 
         return problem.get();
     }
@@ -121,11 +112,7 @@ public class ProblemServiceImpl implements ProblemService {
     public IdentifierDTO addCodeSnippet(UUID id, CreateCodeSnippetDTO codeInfoDTO) {
         CodingProblem problem = getProblemById(id);
 
-        CodeSnippet code = problem.getCodeSnippets()
-                .stream()
-                .filter(c -> c.getLanguage() == codeInfoDTO.getLanguage())
-                .findFirst()
-                .orElse(null);
+        CodeSnippet code = problem.getCodeSnippets().stream().filter(c -> c.getLanguage() == codeInfoDTO.getLanguage()).findFirst().orElse(null);
 
         if (code == null) {
             code = CodeMapper.toEntity(codeInfoDTO);
@@ -133,9 +120,7 @@ public class ProblemServiceImpl implements ProblemService {
             code = codeSnippetRepository.save(code);
         }
 
-        return IdentifierDTO.builder()
-                .id(code.getId())
-                .build();
+        return IdentifierDTO.builder().id(code.getId()).build();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.shubham.codeplayground.model.dto.CreateProblemDTO;
 import com.shubham.codeplayground.model.dto.ProblemDTO;
 import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.entity.ActiveProblem;
+import com.shubham.codeplayground.model.entity.problem.Problem;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 
 import java.util.Collections;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProblemMapper {
-    public static ProblemDTO toDto(CodingProblem problem, String description, ActiveProblem activeProblem) {
+    public static ProblemDTO toDto(Problem problem, String description, ActiveProblem activeProblem) {
         if (problem == null)
             return null;
 
