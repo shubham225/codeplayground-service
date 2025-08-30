@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProblemMapper {
-    public static ProblemDTO toDto(Problem problem, String description, ActiveProblem activeProblem) {
+    public static ProblemDTO toDto(CodingProblem problem, String description, ActiveProblem activeProblem) {
         if (problem == null)
             return null;
 
@@ -68,8 +68,7 @@ public class ProblemMapper {
 
         CodingProblem problem = new CodingProblem();
 
-        problem.setTitle(dto.getTitle());
-        problem.setDescriptionMd(dto.getDescription());
+        problem.setDescriptionMd(dto.getDescriptionMd());
         problem.setDifficulty(dto.getDifficulty());
         problem.setMaxExecutionTime(dto.getMaxExecutionTime());
 

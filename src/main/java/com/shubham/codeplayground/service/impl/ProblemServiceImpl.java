@@ -48,11 +48,6 @@ public class ProblemServiceImpl implements ProblemService {
         List<Problem> problems = getAllProblems();
         User user = userService.getUserByUsername(username);
 
-        Problem problem2 = new Problem();
-        problem2.setTitle("Three Sum");
-        problem2.setDifficulty(ProblemDifficulty.HARD);
-        problems.add(problem2);
-
         return problems.stream().map(problem -> {
             ActiveProblem activeProblem = null;
 
