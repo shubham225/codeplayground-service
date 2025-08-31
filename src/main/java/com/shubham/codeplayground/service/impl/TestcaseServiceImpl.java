@@ -26,9 +26,24 @@ public class TestcaseServiceImpl implements TestcaseService {
         }
         return testcases;
     }
+    
+    private static Testcase parseLine(String line) {
+        // Format of TestCase File is "[param1, param2] -> output" ex. ["hello","world"] -> "helloworld"
+        String[] parts = line.split("->");
 
-    private Testcase parseLine(String line) {
-        // TODO: logic to parse single line into Testcase
-        return null;
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid format: " + line);
+        }
+
+        String input = parts[0].trim();
+        String output = parts[1].trim();
+
+        Testcase testcase = new Testcase();
+
+        testcase.setTestcase(input);
+        testcase.setAnswer(output);
+        testcase.setIsActive(false);
+
+        return testcase;
     }
 }
