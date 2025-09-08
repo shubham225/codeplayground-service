@@ -22,7 +22,6 @@ public class JavaCodeGenerator implements CodeGenerator{
             sb.append("                TestCase test = TestCaseParser.parseLine(line);\n");
             sb.append("                List<Object> inputs = test.getInput();\n\n");
 
-            // ---- Generate parameter casting from stub ----
             for (int i = 0; i < stub.getParameters().size(); i++) {
                 CodeStubDTO.ParameterDTO p = stub.getParameters().get(i);
                 String type = p.getType();
@@ -55,7 +54,7 @@ public class JavaCodeGenerator implements CodeGenerator{
             }
 
             sb.append("\n");
-            // ---- Method call ----
+
             String returnType = stub.getReturnType() + (stub.isReturnisArray() ? "[]" : "");
             String expectedCast = getExpectedCast(stub.getReturnType(), stub.isReturnisArray());
 
@@ -85,7 +84,6 @@ public class JavaCodeGenerator implements CodeGenerator{
             sb.append("        return resultLog.toString();\n");
             sb.append("    }\n\n");
 
-            // === Utility methods ===
             sb.append(getUtilityMethods());
 
             sb.append("}\n");
@@ -137,26 +135,21 @@ public class JavaCodeGenerator implements CodeGenerator{
         sb.append("import java.util.*;\n\n");
         sb.append("class Solution {\n");
 
-        // Build return type
         String returnType = codeStub.getReturnType() + (codeStub.isReturnisArray() ? "[]" : "");
 
-        // Build parameters
         List<String> params = new ArrayList<>();
         for (CodeStubDTO.ParameterDTO p : codeStub.getParameters()) {
             String paramType = p.getType() + (p.isArray() ? "[]" : "");
             params.add(paramType + " " + p.getName());
         }
 
-        // Build method signature
         sb.append("    public ").append(returnType).append(" ")
                 .append(codeStub.getFunctionName()).append("(")
                 .append(String.join(", ", params))
                 .append(") {\n");
 
-        // Method body placeholder
         sb.append("        // Write your code here\n");
 
-        // Default return placeholder
         sb.append("        return ").append(getDefaultReturn(codeStub.getReturnType(), codeStub.isReturnisArray())).append(";\n");
 
         sb.append("    }\n");
