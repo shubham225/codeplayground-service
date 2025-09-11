@@ -66,8 +66,8 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
 
 ### Code Execution
 
-- **POST /api/v1/submit**: Upload the code to backend, and submitted code to user problem.
-- **POST /api/v1/execute**: Submit code for execution. The backend will execute the code in a Docker container and
+- **POST /api/v1/submissions**: Upload the code to backend, and submitted code to user problem.
+- **POST /api/v1/submissions/{id}/execute**: Submit code for execution. The backend will execute the code in a Docker container and
   return the result.
 
 ## 📜 License
