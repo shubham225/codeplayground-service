@@ -24,7 +24,7 @@ logging:
 # Database Config
 spring:
   profiles:
-    active: mariadb
+    active: h2
   jpa:
     hibernate:
       ddl-auto: update

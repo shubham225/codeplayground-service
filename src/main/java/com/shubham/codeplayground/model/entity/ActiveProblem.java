@@ -17,7 +17,7 @@ public class ActiveProblem extends BaseModel {
     @Enumerated(EnumType.ORDINAL)
     private ProblemStatus status;
 
-    @OneToMany(mappedBy = "userProblem", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "activeProblem", fetch = FetchType.EAGER)
     private List<Submission> submissions = new ArrayList<>();
 
     public ActiveProblem() {
