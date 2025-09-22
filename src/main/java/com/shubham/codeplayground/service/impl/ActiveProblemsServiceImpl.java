@@ -8,18 +8,16 @@ import com.shubham.codeplayground.model.entity.ActiveProblem;
 import com.shubham.codeplayground.model.mapper.SubmissionMapper;
 import com.shubham.codeplayground.repository.UserProblemsRepository;
 import com.shubham.codeplayground.service.ActiveProblemsService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ActiveProblemsServiceImpl implements ActiveProblemsService {
     private final UserProblemsRepository userProblemsRepository;
-
-    public ActiveProblemsServiceImpl(UserProblemsRepository userProblemsRepository) {
-        this.userProblemsRepository = userProblemsRepository;
-    }
 
     @Override
     public ActiveProblem getUserProblemByUserAndProblemID(UUID userId, UUID problemID) {

@@ -5,6 +5,7 @@ import com.shubham.codeplayground.model.entity.BinaryFile;
 import com.shubham.codeplayground.repository.BinaryFileRepository;
 import com.shubham.codeplayground.service.StorageService;
 import com.shubham.codeplayground.utils.FileUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,12 +14,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class StorageServiceImpl implements StorageService {
     private final BinaryFileRepository fileRepository;
-
-    public StorageServiceImpl(BinaryFileRepository fileRepository) {
-        this.fileRepository = fileRepository;
-    }
 
     @Override
     public FileUploadDTO uploadFile(MultipartFile file) throws IOException {

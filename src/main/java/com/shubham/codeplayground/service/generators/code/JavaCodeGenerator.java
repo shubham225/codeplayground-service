@@ -10,11 +10,12 @@ import java.util.List;
 public class JavaCodeGenerator implements CodeGenerator{
     @Override
     public String generateDriverCode(CodeStubDTO stub) {
+        //TODO: Write correct Logic
             StringBuilder sb = new StringBuilder();
 
             sb.append("import java.util.*;\n\n");
             sb.append("public class Driver {\n\n");
-            sb.append("    public static String runTests() {\n");
+            sb.append("    public static void main() {\n");
             sb.append("        StringBuilder resultLog = new StringBuilder();\n");
             sb.append("        int testNum = 1;\n\n");
             sb.append("        for (String line : TestCases.getAll()) {\n");

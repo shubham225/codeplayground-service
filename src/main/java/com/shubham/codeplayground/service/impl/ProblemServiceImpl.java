@@ -20,6 +20,7 @@ import com.shubham.codeplayground.service.ActiveProblemsService;
 import com.shubham.codeplayground.service.UserService;
 import com.shubham.codeplayground.service.generators.problem.ProblemGenerator;
 import com.shubham.codeplayground.service.generators.problem.ProblemGeneratorFactory;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,20 +29,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ProblemServiceImpl implements ProblemService {
     private final CodingProblemRepository codingProblemRepository;
     private final UserService userService;
     private final ActiveProblemsService activeProblemsService;
     private final CodeSnippetRepository codeSnippetRepository;
     private final ProblemGeneratorFactory problemGeneratorFactory;
-
-    public ProblemServiceImpl(CodingProblemRepository codingProblemRepository, UserService userService, ActiveProblemsService activeProblemsService, CodeSnippetRepository codeSnippetRepository, ProblemGeneratorFactory problemGeneratorFactory) {
-        this.codingProblemRepository = codingProblemRepository;
-        this.userService = userService;
-        this.activeProblemsService = activeProblemsService;
-        this.codeSnippetRepository = codeSnippetRepository;
-        this.problemGeneratorFactory = problemGeneratorFactory;
-    }
 
     @Override
     public List<ProblemSummeryDTO> getAllProblemSummery(String username) {

@@ -20,6 +20,7 @@ import com.shubham.codeplayground.service.execution.executor.CodeExecutorService
 import com.shubham.codeplayground.model.result.CodeRunResult;
 import com.shubham.codeplayground.service.execution.runner.CodeRunner;
 import com.shubham.codeplayground.service.execution.runner.CodeRunnerFactory;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -28,6 +29,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class SubmissionServiceImpl implements SubmissionService {
     private final ActiveProblemsService activeProblemsService;
     private final UserService userService;
@@ -36,21 +38,6 @@ public class SubmissionServiceImpl implements SubmissionService {
     private final CodeExecutorService codeExecutorService;
     private final CodeRunnerFactory codeRunnerFactory;
     private final AppProperties appProperties;
-
-    public SubmissionServiceImpl(ActiveProblemsService activeProblemsService,
-                                 UserService userService,
-                                 SubmissionRepository submissionRepository,
-                                 ProblemService problemService,
-                                 CodeExecutorService codeExecutorService,
-                                 CodeRunnerFactory codeRunnerFactory, AppProperties appProperties) {
-        this.activeProblemsService = activeProblemsService;
-        this.userService = userService;
-        this.submissionRepository = submissionRepository;
-        this.problemService = problemService;
-        this.codeExecutorService = codeExecutorService;
-        this.codeRunnerFactory = codeRunnerFactory;
-        this.appProperties = appProperties;
-    }
 
     @Override
     public ActionDTO submitAndCompileUserCode(SubmitReqDTO submitRequest, String username) {

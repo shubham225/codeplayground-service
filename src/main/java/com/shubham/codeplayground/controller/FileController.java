@@ -22,6 +22,7 @@ public class FileController {
     public FileController(StorageService storageService) {
         this.storageService = storageService;
     }
+
     @RequestMapping(
             path = "/upload",
             method = RequestMethod.POST

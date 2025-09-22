@@ -6,6 +6,7 @@ import com.shubham.codeplayground.model.entity.Testcase;
 import com.shubham.codeplayground.repository.BinaryFileRepository;
 import com.shubham.codeplayground.service.StorageService;
 import com.shubham.codeplayground.service.TestcaseService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
@@ -15,12 +16,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class TestcaseServiceImpl implements TestcaseService {
     private final StorageService storageService;
-
-    public TestcaseServiceImpl(StorageService storageService) {
-        this.storageService = storageService;
-    }
 
     @Override
     public List<Testcase> parseTestcasesFromFile(UUID id) {

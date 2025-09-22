@@ -4,18 +4,16 @@ import com.shubham.codeplayground.exception.UserNotFoundException;
 import com.shubham.codeplayground.model.entity.User;
 import com.shubham.codeplayground.repository.UserRepository;
 import com.shubham.codeplayground.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public User getUserByUsername(String username) {
