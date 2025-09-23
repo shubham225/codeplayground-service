@@ -7,6 +7,7 @@ import com.shubham.codeplayground.model.result.CodeExecutorResult;
 import com.shubham.codeplayground.model.result.CodeRunResult;
 import com.shubham.codeplayground.model.helper.LanguageProperties;
 import com.shubham.codeplayground.utils.FileUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -18,12 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("JAVA")
+@AllArgsConstructor
 public class JavaCodeRunner implements CodeRunner {
     private final CodeExecutorService codeExecutorService;
-
-    public JavaCodeRunner(CodeExecutorService codeExecutorService) {
-        this.codeExecutorService = codeExecutorService;
-    }
 
     @Override
     public CodeRunResult validate(String driverCode, String code, String userHome, String testCasePath, String answerKeyPath) {

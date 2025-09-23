@@ -1,0 +1,132 @@
+Sign Up Request:
+
+	{
+	    "firstname": "Shubham",
+	    "lastname": "Shinde",
+	    "email": "shubhamshinde225@gmail.com",
+	    "password": "Qwerty123",
+	    "confirmPassword": "Qwerty123"
+	}
+
+Coding Question Request:
+
+	{
+		"type": "Coding",
+        "summery": "Input - Question Summery ",
+        "difficulty": "Medium",
+        "description": "# Markup Text\n### Sign Up Request:\n```json\n{\n\t\"firstname\": \"Shubham\",\n\t\"lastname\": \"Shinde\",\n\t\"email\": \"shubhamshinde225@gmail.com\",\n\t\"password\": \"Qwerty123\",\n\t\"confirmPassword\": \"Qwerty123\"\n}",
+        "tags": [
+            {
+                "id": "2568786825",
+                "text": "Tag-1"
+            },
+            {
+                "id": "1439434188",
+                "text": "Tag-2"
+            }
+        ],
+		"languages": [
+		    "C++",
+		    "Java"
+		],
+		"codeStub": {
+		    "functionName": "solve",
+		    "returnType": "int",
+		    "parameters": [
+		        {
+		            "id": "13b0d2e9-f0d0-87f8-2554-1b6b949e8668",
+		            "name": "arrayArg",
+		            "type": "int",
+		            "isArray": true
+		        },
+		        {
+		            "id": "7c90aef0-1cca-0c77-5e8b-0abb65bc3d90",
+		            "name": "argStr",
+		            "type": "String",
+		            "isArray": false
+		        }
+		    ],
+		    "returnisArray": false
+		},
+		"testcases": [
+		    {
+		        "id": "fc83583a-2258-4c30-8e6a-1606fa8e659f",
+		        "filename": "testcases.txt"
+		    }
+		],
+		"solutions": [
+		    {
+		        "id": "7782f669-d8f4-43be-9ff8-ec7c51d3e192",
+		        "filename": "Solution.java"
+		    }
+		]
+	}
+
+MCQ Question Request (Single Correct):
+	{
+		"question": "Input - MCQ Single Correct Question Summery",
+		"options": [
+		    {
+		        "id": "d0b9e126-8bdc-ff99-1ee4-7e142566b007",
+		        "text": "Option 1",
+		        "isAnswer": false
+		    },
+		    {
+		        "id": "#12346",
+		        "text": "Option 2",
+		        "isAnswer": true
+		    },
+		    {
+		        "id": "#12345",
+		        "text": "Option 3",
+		        "isAnswer": false
+		    },
+		    {
+		        "id": "76821fda-a556-7d27-7721-699a8f5de08f",
+		        "text": "Option 4",
+		        "isAnswer": false
+		    }
+		],
+		"type": "SINGLE_CORRECT"
+	}
+
+MCQ Question Request (Multiple Correct):
+	{
+		"question": "Input - MCQ Multiple Correct Question Summery",
+		"options": [
+		    {
+		        "id": "#12345",
+		        "text": "Option 1",
+		        "isAnswer": false
+		    },
+		    {
+		        "id": "#12346",
+		        "text": "Option 2",
+		        "isAnswer": true
+		    },
+		    {
+		        "id": "afba770e-19b8-5b06-c615-49e41e155923",
+		        "text": "Option 3",
+		        "isAnswer": false
+		    },
+		    {
+		        "id": "d4d46f9e-b026-1f8a-d739-80dda7264d1e",
+		        "text": "Option 4",
+		        "isAnswer": true
+		    }
+		],
+		"type": "MULTIPLE_CORRECT"
+	}
+
+MCQ Question Request (Numerical):
+	{
+		"question": "Input - MCQ Numerical Question Summery",
+		"options": [
+		    {
+		        "id": "dummy",
+		        "text": "123.09",
+		        "isAnswer": true
+		    }
+		],
+		"type": "NUMERICAL"
+	}
