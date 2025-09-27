@@ -1,22 +1,18 @@
 package com.shubham.codeplayground.service.impl;
 
 import com.shubham.codeplayground.exception.InvalidTestcaseFormatException;
-import com.shubham.codeplayground.model.entity.BinaryFile;
 import com.shubham.codeplayground.model.entity.Testcase;
-import com.shubham.codeplayground.repository.BinaryFileRepository;
 import com.shubham.codeplayground.service.StorageService;
 import com.shubham.codeplayground.service.TestcaseService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TestcaseServiceImpl implements TestcaseService {
     private final StorageService storageService;
 

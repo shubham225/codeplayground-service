@@ -1,12 +1,12 @@
 package com.shubham.codeplayground.service.generators.code;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CodeGeneratorFactory {
     private final Map<String, CodeGenerator> codeGeneratorMap;
 

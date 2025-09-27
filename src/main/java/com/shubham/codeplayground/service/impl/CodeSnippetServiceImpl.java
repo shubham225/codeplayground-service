@@ -9,13 +9,13 @@ import com.shubham.codeplayground.service.execution.runner.CodeRunner;
 import com.shubham.codeplayground.service.execution.runner.CodeRunnerFactory;
 import com.shubham.codeplayground.service.generators.code.CodeGenerator;
 import com.shubham.codeplayground.service.generators.code.CodeGeneratorFactory;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CodeSnippetServiceImpl implements CodeSnippetService {
     private final CodeRunnerFactory codeRunnerFactory;
     private final CodeGeneratorFactory codeGeneratorFactory;

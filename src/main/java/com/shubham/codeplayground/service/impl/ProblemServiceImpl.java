@@ -8,7 +8,6 @@ import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.entity.User;
 import com.shubham.codeplayground.model.entity.ActiveProblem;
 import com.shubham.codeplayground.model.entity.problem.Problem;
-import com.shubham.codeplayground.model.enums.ProblemDifficulty;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 import com.shubham.codeplayground.model.mapper.CodeMapper;
 import com.shubham.codeplayground.model.mapper.ProblemMapper;
@@ -20,7 +19,7 @@ import com.shubham.codeplayground.service.ActiveProblemsService;
 import com.shubham.codeplayground.service.UserService;
 import com.shubham.codeplayground.service.generators.problem.ProblemGenerator;
 import com.shubham.codeplayground.service.generators.problem.ProblemGeneratorFactory;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProblemServiceImpl implements ProblemService {
     private final CodingProblemRepository codingProblemRepository;
     private final UserService userService;

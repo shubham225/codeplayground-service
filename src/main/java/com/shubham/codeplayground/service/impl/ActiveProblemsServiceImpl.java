@@ -8,14 +8,14 @@ import com.shubham.codeplayground.model.entity.ActiveProblem;
 import com.shubham.codeplayground.model.mapper.SubmissionMapper;
 import com.shubham.codeplayground.repository.UserProblemsRepository;
 import com.shubham.codeplayground.service.ActiveProblemsService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ActiveProblemsServiceImpl implements ActiveProblemsService {
     private final UserProblemsRepository userProblemsRepository;
 

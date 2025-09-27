@@ -21,6 +21,7 @@ import com.shubham.codeplayground.model.result.CodeRunResult;
 import com.shubham.codeplayground.service.execution.runner.CodeRunner;
 import com.shubham.codeplayground.service.execution.runner.CodeRunnerFactory;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -29,7 +30,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SubmissionServiceImpl implements SubmissionService {
     private final ActiveProblemsService activeProblemsService;
     private final UserService userService;

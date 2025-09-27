@@ -11,6 +11,7 @@ import com.shubham.codeplayground.repository.CodingProblemRepository;
 import com.shubham.codeplayground.service.CodeSnippetService;
 import com.shubham.codeplayground.service.StorageService;
 import com.shubham.codeplayground.service.TestcaseService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,21 +19,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Component("CODING")
+@RequiredArgsConstructor
 public class CodingProblemGenerator implements ProblemGenerator {
-    private final TestcaseService testcaseService;
-    private final CodeSnippetService codeSnippetService;
-    private final CodingProblemRepository codingProblemRepository;
-    private final StorageService storageService;
-
-    public CodingProblemGenerator(TestcaseService testcaseService,
-                                  CodeSnippetService codeSnippetService,
-                                  CodingProblemRepository codingProblemRepository,
-                                  StorageService storageService) {
-        this.testcaseService = testcaseService;
-        this.codeSnippetService = codeSnippetService;
-        this.codingProblemRepository = codingProblemRepository;
-        this.storageService = storageService;
-    }
+    private final TestcaseService           testcaseService;
+    private final CodeSnippetService        codeSnippetService;
+    private final CodingProblemRepository   codingProblemRepository;
+    private final StorageService            storageService;
 
     @Override
     public Problem generate(CreateProblemDTO createProblemDTO) {
