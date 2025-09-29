@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.UUID;
 
-import static com.shubham.codeplayground.controller.RestApi.VERSION;
+import static com.shubham.codeplayground.constant.ApplicationConstants.VERSION;
 
 @RestController
 @RequestMapping(value = VERSION + "/problems")

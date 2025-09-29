@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
-import static com.shubham.codeplayground.controller.RestApi.VERSION;
+import static com.shubham.codeplayground.constant.ApplicationConstants.VERSION;
 
 @RestController
 @RequestMapping(value = VERSION + "/submissions")

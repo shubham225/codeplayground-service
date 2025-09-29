@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
-import static com.shubham.codeplayground.controller.RestApi.VERSION;
+import static com.shubham.codeplayground.constant.ApplicationConstants.VERSION;
 
 @RestController
 @RequestMapping(value = VERSION + "/files")

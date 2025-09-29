@@ -1,5 +1,6 @@
 package com.shubham.codeplayground.controller;
 
+import com.shubham.codeplayground.constant.ApplicationConstants;
 import com.shubham.codeplayground.model.result.AppResult;
 import com.shubham.codeplayground.service.ActiveProblemsService;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-import static com.shubham.codeplayground.controller.RestApi.VERSION;
+import static com.shubham.codeplayground.constant.ApplicationConstants.VERSION;
+
 
 @RestController
 @RequestMapping(value = VERSION + "/activeProblems")
