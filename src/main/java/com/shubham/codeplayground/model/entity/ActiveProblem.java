@@ -6,7 +6,8 @@ import lombok.*;
 
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @AllArgsConstructor

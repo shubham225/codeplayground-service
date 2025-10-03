@@ -3,7 +3,8 @@ package com.shubham.codeplayground.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
