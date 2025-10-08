@@ -6,7 +6,7 @@ app:
 info:
   application:
     name: CodePlayground_
-    description: Online Coding Platform Backend
+    description: CodePlayground an Online Coding Platform - Backend
     author: Shubham Shinde
     version: '@project.version@'
 
