@@ -1,5 +1,7 @@
 package com.shubham.codeplayground.model.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -7,7 +9,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -17,4 +19,10 @@ public class BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @CreationTimestamp
+    private LocalDate createdOn;
+
+    @UpdateTimestamp
+    private LocalDate updatedOn;
 }
