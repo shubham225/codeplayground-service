@@ -12,18 +12,21 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+
 class CodeGeneratorTest {
-    @Autowired
     private CodeGenerator codeGenerator;
     private CodeStubDTO codeStub;
+
+    CodeGeneratorTest(){
+        codeGenerator = new JavaCodeGenerator();
+    }
 
     @BeforeEach
     void initData() {
         codeStub = new CodeStubDTO();
         codeStub.setFunctionName("solve");
         codeStub.setReturnType("int");
-        codeStub.setReturnisArray(false);
+        codeStub.setReturnisArray(true);
 
         // Create parameter list
         List<CodeStubDTO.ParameterDTO> parameters = new ArrayList<>();
@@ -41,7 +44,7 @@ class CodeGeneratorTest {
         param2.setId("7c90aef0-1cca-0c77-5e8b-0abb65bc3d90");
         param2.setName("argStr");
         param2.setType("String");
-        param2.setArray(false);
+        param2.setArray(true);
         parameters.add(param2);
 
         // Assign parameters to codeStub
