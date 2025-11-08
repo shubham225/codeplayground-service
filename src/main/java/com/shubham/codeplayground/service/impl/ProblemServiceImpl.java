@@ -3,10 +3,10 @@ package com.shubham.codeplayground.service.impl;
 import com.shubham.codeplayground.exception.ProblemNotFoundException;
 import com.shubham.codeplayground.exception.UserProblemNotFoundException;
 import com.shubham.codeplayground.model.dto.*;
-import com.shubham.codeplayground.model.entity.CodeSnippet;
-import com.shubham.codeplayground.model.entity.problem.CodingProblem;
-import com.shubham.codeplayground.model.entity.User;
 import com.shubham.codeplayground.model.entity.ActiveProblem;
+import com.shubham.codeplayground.model.entity.CodeSnippet;
+import com.shubham.codeplayground.model.entity.User;
+import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.entity.problem.Problem;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 import com.shubham.codeplayground.model.mapper.CodeMapper;
@@ -14,8 +14,8 @@ import com.shubham.codeplayground.model.mapper.ProblemMapper;
 import com.shubham.codeplayground.model.mapper.ProblemSummeryMapper;
 import com.shubham.codeplayground.repository.CodeSnippetRepository;
 import com.shubham.codeplayground.repository.CodingProblemRepository;
-import com.shubham.codeplayground.service.ProblemService;
 import com.shubham.codeplayground.service.ActiveProblemsService;
+import com.shubham.codeplayground.service.ProblemService;
 import com.shubham.codeplayground.service.UserService;
 import com.shubham.codeplayground.service.generators.problem.ProblemGenerator;
 import com.shubham.codeplayground.service.generators.problem.ProblemGeneratorFactory;
@@ -57,7 +57,9 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public List<Problem> getAllProblems() {
-        return codingProblemRepository.findAll().stream().map(codingProblem -> (Problem) codingProblem).toList();
+        return codingProblemRepository.findAll().stream()
+                .map(codingProblem -> (Problem) codingProblem)
+                .toList();
     }
 
     @Override
@@ -80,7 +82,8 @@ public class ProblemServiceImpl implements ProblemService {
     public CodingProblem getProblemById(UUID id) {
         Optional<CodingProblem> problem = codingProblemRepository.findById(id);
 
-        if (problem.isEmpty()) throw new ProblemNotFoundException("Problem with ID '" + id + "'Not Found");
+        if (problem.isEmpty())
+            throw new ProblemNotFoundException("Problem with ID '" + id + "'Not Found");
 
         return problem.get();
     }
@@ -88,7 +91,8 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public ProblemDTO createProblem(CreateProblemDTO problemDTO) {
         // TODO: implement logic to validate and generate problem
-        ProblemGenerator problemGenerator = problemGeneratorFactory.getProblemGenerator("CODING");
+        ProblemGenerator problemGenerator = problemGeneratorFactory
+                .getProblemGenerator(problemDTO.getType().toUpperCase());
 
         //Generate will also save the record in tables
         Problem problem = problemGenerator.generate(problemDTO);
