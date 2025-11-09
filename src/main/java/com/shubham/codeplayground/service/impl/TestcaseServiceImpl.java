@@ -42,7 +42,7 @@ public class TestcaseServiceImpl implements TestcaseService {
 
     private static Testcase parseLine(String line) {
         // Format of TestCase File is "[param1, param2] -> output" ex. ["hello","world"] -> "helloworld"
-        String[] parts = line.split("->");
+        String[] parts = line.split("\\s*->\\s*");
 
         if (parts.length != 2) {
             throw new IllegalArgumentException("Invalid format: " + line);
@@ -50,6 +50,8 @@ public class TestcaseServiceImpl implements TestcaseService {
 
         String input = parts[0].trim();
         String output = parts[1].trim();
+        input = input.replaceAll("^[|]$", "");
+        output = output.replaceAll("^[|]$", "");
 
         Testcase testcase = new Testcase();
 

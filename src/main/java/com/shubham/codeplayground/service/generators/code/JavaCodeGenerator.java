@@ -17,6 +17,7 @@ public class JavaCodeGenerator implements CodeGenerator{
         sb.append("\tpublic static void main(String[] args) {\n");
         sb.append("\t\ttry {\n");
         sb.append("\t\t\tint argIndex = 0;\n");
+        // ---- Identify and run loop for testcases
         sb.append("\t\t\tint testcases = Integer.parseInt(args[argIndex++]);\n");
         sb.append("\t\t\twhile (testcases > 0) {\n");
         sb.append("\t\t\t\ttestcases--;\n");
@@ -77,25 +78,24 @@ public class JavaCodeGenerator implements CodeGenerator{
     }
 
     private static String mapType(String type) {
-        switch (type.toLowerCase()) {
-            case "int": return "int";
-            case "float": return "float";
-            case "double": return "double";
-            case "boolean": return "boolean";
-            case "string": return "String";
-            default: return "Object";
-        }
+        return switch (type.toLowerCase()) {
+            case "int" -> "int";
+            case "float" -> "float";
+            case "double" -> "double";
+            case "boolean" -> "boolean";
+            case "string" -> "String";
+            default -> "Object";
+        };
     }
 
     private static String parseValue(String type, String argExpr) {
-        switch (type.toLowerCase()) {
-            case "int": return "Integer.parseInt(" + argExpr + ")";
-            case "float": return "Float.parseFloat(" + argExpr + ")";
-            case "double": return "Double.parseDouble(" + argExpr + ")";
-            case "boolean": return "Boolean.parseBoolean(" + argExpr + ")";
-            case "string": return argExpr;
-            default: return argExpr;
-        }
+        return switch (type.toLowerCase()) {
+            case "int" -> "Integer.parseInt(" + argExpr + ")";
+            case "float" -> "Float.parseFloat(" + argExpr + ")";
+            case "double" -> "Double.parseDouble(" + argExpr + ")";
+            case "boolean" -> "Boolean.parseBoolean(" + argExpr + ")";
+            default -> argExpr;
+        };
     }
 
     @Override

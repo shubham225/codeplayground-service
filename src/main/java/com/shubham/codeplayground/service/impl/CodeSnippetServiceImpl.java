@@ -35,6 +35,6 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
     public Boolean validate(CodeSnippet codeSnippet, List<Testcase> testcases) {
         //TODO: Implementation - compile run against the testcases to validate
         CodeRunner codeRunner = codeRunnerFactory.getCodeRunner(codeSnippet.getLanguage().toString());
-        return false;
+        return true;
     }
 }

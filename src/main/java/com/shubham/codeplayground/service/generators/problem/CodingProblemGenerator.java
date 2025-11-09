@@ -39,8 +39,9 @@ public class CodingProblemGenerator implements ProblemGenerator {
         List<CodeSnippet> codeSnippets = new ArrayList<>();
 
         for (String s : languages) {
-            Language language = Language.valueOf(s);
+            Language language = Language.valueOf(s.toUpperCase());
             CodeSnippet snippet = codeSnippetService.generateSnippet(language, createProblemDTO.getCodeStub(), solution);
+            // TODO: if code snippet is not validated array is null will give fatal error
             if (codeSnippetService.validate(snippet, testcases)) {
                 codeSnippets.add(snippet);
             }
@@ -62,8 +63,10 @@ public class CodingProblemGenerator implements ProblemGenerator {
         codingProblem.setDescriptionMd(createProblemDTO.getDescriptionMd());
         codingProblem.setDifficulty(createProblemDTO.getDifficulty());
         codingProblem.setMaxExecutionTime(createProblemDTO.getMaxExecutionTime());
-        codingProblem.setTestCases(testcases);
-        codingProblem.setCodeSnippets(codeSnippets);
+
+        codingProblem.addAllTestcases(testcases);
+        codingProblem.addAllCodeSnippets(codeSnippets);
+
         codingProblem.setIsActive(true);
 
         return codingProblem;
