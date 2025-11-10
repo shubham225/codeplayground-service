@@ -1,5 +1,7 @@
 package com.shubham.codeplayground.service.execution.runner;
 
+import com.shubham.codeplayground.model.entity.Submission;
+import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.enums.Language;
 import com.shubham.codeplayground.model.enums.SubmissionStatus;
 import com.shubham.codeplayground.model.result.CodeRunResult;
@@ -23,4 +25,11 @@ public class JavaScriptCodeRunner implements CodeRunner {
                 .dockerImage("node")
                 .build();
     }
+
+    @Override
+    public CodeRunResult validateSubmission(Submission submission, CodingProblem problem, String userHome) {
+        return null;
+    }
+
+
 }

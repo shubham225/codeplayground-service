@@ -1,5 +1,6 @@
 package com.shubham.codeplayground.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class CodeStubDTO {
         private String id;
         private String name;
         private String type;
+        @JsonProperty("isArray")
         private boolean isArray;
     }
 }

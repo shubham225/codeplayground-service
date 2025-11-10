@@ -21,10 +21,10 @@ import java.util.UUID;
 @Component("CODING")
 @RequiredArgsConstructor
 public class CodingProblemGenerator implements ProblemGenerator {
-    private final TestcaseService           testcaseService;
-    private final CodeSnippetService        codeSnippetService;
-    private final CodingProblemRepository   codingProblemRepository;
-    private final StorageService            storageService;
+    private final TestcaseService testcaseService;
+    private final CodeSnippetService codeSnippetService;
+    private final CodingProblemRepository codingProblemRepository;
+    private final StorageService storageService;
 
     @Override
     public Problem generate(CreateProblemDTO createProblemDTO) {
@@ -39,11 +39,15 @@ public class CodingProblemGenerator implements ProblemGenerator {
         List<CodeSnippet> codeSnippets = new ArrayList<>();
 
         for (String s : languages) {
-            Language language = Language.valueOf(s.toUpperCase());
-            CodeSnippet snippet = codeSnippetService.generateSnippet(language, createProblemDTO.getCodeStub(), solution);
-            // TODO: if code snippet is not validated array is null will give fatal error
-            if (codeSnippetService.validate(snippet, testcases)) {
-                codeSnippets.add(snippet);
+            try {
+                Language language = Language.valueOf(s.toUpperCase());
+                CodeSnippet snippet = codeSnippetService.generateSnippet(language, createProblemDTO.getCodeStub(), solution);
+                // TODO: if code snippet is not validated array is null will give fatal error
+                if (codeSnippetService.validate(snippet, testcases)) {
+                    codeSnippets.add(snippet);
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Language not found in Languages: " + e.getMessage());
             }
         }
 

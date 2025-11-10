@@ -39,6 +39,7 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         return output;
     }
 
+    // TODO: Reformat this code for general purpose
     private CodeExecutorResult executeCodeInDocker(String execDirPath,
                                                    String compiler,
                                                    String action) throws IOException, InterruptedException {
@@ -61,6 +62,7 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         Process process = processBuilder.start();
         long pid = process.pid();
 
+        //TODO: This may Cause issue if process is done executing before running PS command
         Process psProcess = new ProcessBuilder("ps", "-p", String.valueOf(pid), "-o", "rss=").start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(psProcess.getInputStream()));
         String memoryUsage = reader.readLine().trim();

@@ -15,7 +15,6 @@ public class JavaCodeGenerator implements CodeGenerator{
         sb.append("import java.util.*;\n\n");
         sb.append("public class Driver {\n");
         sb.append("\tpublic static void main(String[] args) {\n");
-        sb.append("\t\ttry {\n");
         sb.append("\t\t\tint argIndex = 0;\n");
         // ---- Identify and run loop for testcases
         sb.append("\t\t\tint testcases = Integer.parseInt(args[argIndex++]);\n");
@@ -68,9 +67,6 @@ public class JavaCodeGenerator implements CodeGenerator{
         }
 
         sb.append("\t\t\t}\n");
-        sb.append("\t\t} catch (Exception e) {\n");
-        sb.append("\t\t\te.printStackTrace();\n");
-        sb.append("\t\t}\n");
         sb.append("\t}\n");
         sb.append("}\n");
 

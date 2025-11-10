@@ -106,7 +106,8 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         CodeRunner codeRunner = codeRunnerFactory.getCodeRunner(getCodeRunnerType(submission.getLanguage()));
         try {
-            CodeRunResult result = codeRunner.validate(driverCode, submission.getCode(), userDirectory.toString(), testCasesPath.toString(), answerKeyPath.toString());
+            // CodeRunResult result = codeRunner.validate(driverCode, submission.getCode(), userDirectory.toString(), testCasesPath.toString(), answerKeyPath.toString());
+            CodeRunResult result = codeRunner.validateSubmission(submission, problem, userDirectory.toString());
             errorMessage = result.getMessage();
             submission.setStatus(result.getStatus());
             submission.setRuntimeInMs(result.getRuntimeInMs());
@@ -126,10 +127,10 @@ public class SubmissionServiceImpl implements SubmissionService {
     private String getCodeRunnerType(Language language) {
         switch (language) {
             case JAVA -> {
-                return "Java";
+                return "JAVA";
             }
             case JAVASCRIPT -> {
-                return "Javascript";
+                return "JAVASCRIPT";
             }
         }
 
