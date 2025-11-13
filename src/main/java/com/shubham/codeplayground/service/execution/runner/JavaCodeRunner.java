@@ -233,6 +233,8 @@ public class JavaCodeRunner implements CodeRunner {
 
         }
 
+        deleteDirectory(new File(userHome));
+
         return new CodeRunResult(SubmissionStatus.ACCEPTED, "Success", output.getMemoryUsage(), output.getExecTime());
     }
 
