@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,6 @@ public class SubmissionServiceImpl implements SubmissionService {
     private final UserService userService;
     private final SubmissionRepository submissionRepository;
     private final ProblemService problemService;
-    private final CodeExecutorService codeExecutorService;
     private final CodeRunnerFactory codeRunnerFactory;
     private final AppProperties appProperties;
 
@@ -98,19 +98,21 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         Submission submission = submissionOptional.get();
 
+        return executeSubmission(submission.getId());
+    }
 
+    @Override
+    public ActionDTO executeSubmission(UUID submissionId) {
+        String errorMessage = "Success";
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() -> new SubmissionNotFoundException("No Active Submission Found, Submit the code first"));
+        ActiveProblem activeProblem = submission.getActiveProblem();
         CodingProblem problem = problemService.getProblemById(activeProblem.getProblemId());
         User user = userService.getUserById(activeProblem.getUserId());
 
-        String driverCode = problem.getCodeSnippets().stream().filter(c -> c.getLanguage() == language).findFirst().orElseThrow().getDriverCode();
-
         Path userDirectory = Paths.get(appProperties.getHomeDir(), user.getUsername());
-        Path testCasesPath = Paths.get(appProperties.getHomeDir(), "/problems/two-sum/testcases.txt"); //Paths.get(appProperties.getHomeDir(), problem.getTestCasesPath());
-        Path answerKeyPath = Paths.get(appProperties.getHomeDir(), "/problems/two-sum/answer.txt"); //Paths.get(appProperties.getHomeDir(), problem.getAnswerKeyPath());
 
         CodeRunner codeRunner = codeRunnerFactory.getCodeRunner(getCodeRunnerType(submission.getLanguage()));
         try {
-            // CodeRunResult result = codeRunner.validate(driverCode, submission.getCode(), userDirectory.toString(), testCasesPath.toString(), answerKeyPath.toString());
             CodeRunResult result = codeRunner.validateSubmission(submission, problem, userDirectory.toString());
             errorMessage = result.getMessage();
             submission.setStatus(result.getStatus());
@@ -143,6 +145,6 @@ public class SubmissionServiceImpl implements SubmissionService {
             }
         }
 
-        return "Java";
+        return "JAVA";
     }
 }

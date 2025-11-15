@@ -5,12 +5,10 @@ import com.shubham.codeplayground.model.dto.SubmitReqDTO;
 import com.shubham.codeplayground.model.result.AppResult;
 import com.shubham.codeplayground.service.SubmissionService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.UUID;
 
 import static com.shubham.codeplayground.constant.ApplicationConstants.VERSION;
 
@@ -33,12 +31,19 @@ public class SubmissionController {
         return AppResult.success(submissionService.submitAndCompileUserCode(submitRequest, username));
     }
 
-    // TODO: Change path to /{id}/execute and define the function to process the request
     @RequestMapping(
             path = "/execute",
             method = RequestMethod.POST
     )
     public ResponseEntity<AppResult> executeUserCode(@RequestBody ExecuteReqDTO executeRequest) {
         return AppResult.success(submissionService.executeUserCode(executeRequest));
+    }
+
+    @RequestMapping(
+            path = "/{id}/execute",
+            method = RequestMethod.POST
+    )
+    public ResponseEntity<AppResult> executeSubmission(@RequestParam UUID id) {
+        return AppResult.success(submissionService.executeSubmission(id));
     }
 }
