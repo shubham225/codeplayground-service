@@ -45,7 +45,7 @@ public class ProblemServiceImpl implements ProblemService {
             ActiveProblem activeProblem = null;
 
             try {
-                activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(user.getId(), problem.getId());
+                activeProblem = activeProblemsService.getActiveProblemByUserAndProblemId(user.getId(), problem.getId());
             } catch (UserProblemNotFoundException e) {
                 activeProblem = new ActiveProblem();
             }
@@ -70,7 +70,7 @@ public class ProblemServiceImpl implements ProblemService {
         ActiveProblem activeProblem = null;
 
         try {
-            activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(user.getId(), problem.getId());
+            activeProblem = activeProblemsService.getActiveProblemByUserAndProblemId(user.getId(), problem.getId());
         } catch (UserProblemNotFoundException e) {
             activeProblem = new ActiveProblem();
         }

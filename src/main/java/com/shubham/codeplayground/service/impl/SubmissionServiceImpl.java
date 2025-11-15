@@ -22,7 +22,6 @@ import com.shubham.codeplayground.service.ActiveProblemsService;
 import com.shubham.codeplayground.service.ProblemService;
 import com.shubham.codeplayground.service.SubmissionService;
 import com.shubham.codeplayground.service.UserService;
-import com.shubham.codeplayground.service.execution.executor.CodeExecutorService;
 import com.shubham.codeplayground.service.execution.runner.CodeRunner;
 import com.shubham.codeplayground.service.execution.runner.CodeRunnerFactory;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +52,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         Language language = submitRequest.getLanguage();
 
         try {
-            activeProblem = activeProblemsService.getUserProblemByUserAndProblemID(
+            activeProblem = activeProblemsService.getActiveProblemByUserAndProblemId(
                     user.getId(),
                     problem.getId()
             );
@@ -62,7 +61,7 @@ public class SubmissionServiceImpl implements SubmissionService {
             activeProblem.setUserId(user.getId());
             activeProblem.setProblemId(submitRequest.getProblemId());
             activeProblem.setStatus(ProblemStatus.PENDING);
-            activeProblem = activeProblemsService.saveUserProblem(activeProblem);
+            activeProblem = activeProblemsService.saveActiveProblem(activeProblem);
         }
 
         Submission submission = activeProblem.getSubmissions().stream()
@@ -85,7 +84,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Override
     public ActionDTO executeUserCode(ExecuteReqDTO execRequest) {
         String errorMessage = "Success";
-        ActiveProblem activeProblem = activeProblemsService.getUserProblemByID(execRequest.getUserProblemId());
+        ActiveProblem activeProblem = activeProblemsService.getActiveProblemById(execRequest.getUserProblemId());
         Language language = execRequest.getLanguage();
         Optional<Submission> submissionOptional = activeProblem.getSubmissions()
                 .stream()
@@ -128,7 +127,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         if (submission.getStatus() == SubmissionStatus.ACCEPTED)
             activeProblem.setStatus(ProblemStatus.SOLVED);
 
-        activeProblem = activeProblemsService.saveUserProblem(activeProblem);
+        activeProblem = activeProblemsService.saveActiveProblem(activeProblem);
 
         SubmissionDTO submissionDTO = SubmissionMapper.toDto(submission);
 

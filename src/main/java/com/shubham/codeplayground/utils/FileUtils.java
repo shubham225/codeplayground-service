@@ -9,7 +9,7 @@ import java.util.zip.ZipOutputStream;
 public class FileUtils {
     private static final int BUFFER_SIZE = 4096; // 4KB buffer size for efficient processing
 
-    public static void createFileWithContents(String filePath, String contents) {
+    public static void createFileWithContents(String filePath, String contents)  {
         File file = new File(filePath);
         File parentDir = file.getParentFile();
 
@@ -19,7 +19,6 @@ public class FileUtils {
 
         try (FileWriter fileWriter = new FileWriter(filePath)) {
             fileWriter.write(contents);
-            System.out.println("File created and content written successfully.");
         } catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
         }
@@ -58,6 +57,7 @@ public class FileUtils {
 
         try (ZipInputStream zipInputStream = new ZipInputStream(byteArrayInputStream)) {
             ZipEntry zipEntry = zipInputStream.getNextEntry();
+
             if (zipEntry == null) {
                 throw new IOException("No file found inside the ZIP archive.");
             }

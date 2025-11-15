@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserProblemsRepository extends JpaRepository<ActiveProblem, UUID> {
+public interface ActiveProblemRepository extends JpaRepository<ActiveProblem, UUID> {
     Optional<ActiveProblem> findByUserIdAndProblemId(UUID userId, UUID problemId);
 }

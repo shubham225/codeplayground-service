@@ -35,7 +35,7 @@ public class CodingProblemGenerator implements ProblemGenerator {
 
         // TODO: for now only first solution is read, read all array of Solutions files in future
         UUID solutionFileId = createProblemDTO.getSolutions().stream().map(FileDTO::getId).findFirst().get();
-        String solution = storageService.getFileContentsAsString(solutionFileId);
+        String solution = storageService.getDatabaseFileContentsAsString(solutionFileId);
         List<CodeSnippet> codeSnippets = new ArrayList<>();
 
         for (String s : languages) {

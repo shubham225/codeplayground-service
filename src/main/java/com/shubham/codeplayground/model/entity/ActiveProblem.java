@@ -19,7 +19,7 @@ public class ActiveProblem extends BaseModel {
     private ProblemStatus status;
 
     @OneToMany(mappedBy = "activeProblem", fetch = FetchType.EAGER)
-    private List<Submission> submissions = new ArrayList<>();
+    private Set<Submission> submissions = new HashSet<>();
 
     public ActiveProblem() {
         status = ProblemStatus.OPEN;

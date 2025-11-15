@@ -3,75 +3,68 @@ package com.shubham.codeplayground.service.impl;
 import com.shubham.codeplayground.exception.UserProblemNotFoundException;
 import com.shubham.codeplayground.model.dto.CodeDTO;
 import com.shubham.codeplayground.model.dto.SubmissionDTO;
-import com.shubham.codeplayground.model.entity.Submission;
 import com.shubham.codeplayground.model.entity.ActiveProblem;
-import com.shubham.codeplayground.model.mapper.SubmissionMapper;
-import com.shubham.codeplayground.repository.UserProblemsRepository;
+import com.shubham.codeplayground.model.entity.Submission;
+import com.shubham.codeplayground.model.mapper.SubmissionMapperNew;
+import com.shubham.codeplayground.repository.ActiveProblemRepository;
 import com.shubham.codeplayground.service.ActiveProblemsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ActiveProblemsServiceImpl implements ActiveProblemsService {
-    private final UserProblemsRepository userProblemsRepository;
+    private final ActiveProblemRepository activeProblemRepository;
+    private final SubmissionMapperNew submissionMapper;
 
     @Override
-    public ActiveProblem getUserProblemByUserAndProblemID(UUID userId, UUID problemID) {
-        Optional<ActiveProblem> userProblemOptional = userProblemsRepository.findByUserIdAndProblemId(userId, problemID);
-
-        if(userProblemOptional.isEmpty())
-            throw new UserProblemNotFoundException("User Problem Doesn't Exists");
-
-        return userProblemOptional.get();
+    public ActiveProblem getActiveProblemByUserAndProblemId(UUID userId, UUID problemID) {
+        return activeProblemRepository
+                .findByUserIdAndProblemId(userId, problemID)
+                .orElseThrow(() -> new UserProblemNotFoundException(
+                        MessageFormat
+                                .format("Active problem with id {1} for user {0} not found.",userId, problemID)
+                ));
     }
 
     @Override
-    public ActiveProblem getUserProblemByID(UUID id) {
-        Optional<ActiveProblem> userProblemOptional = userProblemsRepository.findById(id);
-
-        if(userProblemOptional.isEmpty())
-            throw new UserProblemNotFoundException("User Problem Doesn't Exists");
-
-        return userProblemOptional.get();
+    public ActiveProblem getActiveProblemById(UUID id) {
+        return activeProblemRepository
+                .findById(id)
+                .orElseThrow(() -> new UserProblemNotFoundException(
+                        MessageFormat.format("Active problem with id {0} don't exist.", id)));
     }
 
     @Override
-    public Set<CodeDTO> getLatestUserCode(UUID id) {
-        Set<Submission> submissions = getSubmissionsByUserProblemId(id);
+    public Set<CodeDTO> getLatestUserCodeByActiveProblemId(UUID id) {
+        Set<Submission> submissions = getActiveProblemById(id).getSubmissions();
 
-        Set<Submission> latestSubmissionsByLang = submissions.stream()
+        return submissions.stream()
                 .collect(Collectors.groupingBy(
                         Submission::getLanguage,
                         Collectors.maxBy(Comparator.comparing(Submission::getDate))
                 ))
                 .values().stream()
-                .flatMap(Optional::stream) // Flatten Optional to stream only present values
-                .collect(Collectors.toSet());
-
-        return latestSubmissionsByLang.stream()
-                .map(s -> new CodeDTO(s.getLanguage(), s.getCode()))
+                .flatMap(Optional::stream)
+                .map(submission -> new CodeDTO(submission.getLanguage(), submission.getCode()))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public Set<Submission> getSubmissionsByUserProblemId(UUID id) {
-        return new HashSet<>(getUserProblemByID(id).getSubmissions());
-    }
-
-    @Override
-    public Set<SubmissionDTO> getSubmissionDTOByUserProblemId(UUID id) {
-        return getUserProblemByID(id).getSubmissions().stream()
-                .map(SubmissionMapper::toDto)
+    public Set<SubmissionDTO> getSubmissionsByActiveProblemId(UUID id) {
+        // LinkedHashSet is returned so that sorted order is preserved.
+        return getActiveProblemById(id).getSubmissions().stream()
+                .map(submissionMapper::toDto)
                 .sorted(Comparator.comparing(SubmissionDTO::getDate).reversed())
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
-    public ActiveProblem saveUserProblem(ActiveProblem activeProblem) {
-        return userProblemsRepository.save(activeProblem);
+    public ActiveProblem saveActiveProblem(ActiveProblem activeProblem) {
+        return activeProblemRepository.save(activeProblem);
     }
 }

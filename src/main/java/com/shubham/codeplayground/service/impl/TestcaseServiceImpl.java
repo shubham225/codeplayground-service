@@ -18,7 +18,7 @@ public class TestcaseServiceImpl implements TestcaseService {
 
     @Override
     public List<Testcase> parseTestcasesFromFile(UUID id) {
-        return parseTestcasesFromBuffer(storageService.getFileContentsAsString(id));
+        return parseTestcasesFromBuffer(storageService.getDatabaseFileContentsAsString(id));
     }
 
     @Override

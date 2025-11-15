@@ -7,6 +7,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 public interface StorageService {
-    public FileUploadDTO uploadFile(MultipartFile file) throws IOException;
-    public String getFileContentsAsString(UUID id);
+    public FileUploadDTO uploadFileToDatabase(MultipartFile file);
+    public String getDatabaseFileContentsAsString(UUID id);
 }

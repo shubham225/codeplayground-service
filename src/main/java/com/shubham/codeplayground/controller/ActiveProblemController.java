@@ -1,6 +1,5 @@
 package com.shubham.codeplayground.controller;
 
-import com.shubham.codeplayground.constant.ApplicationConstants;
 import com.shubham.codeplayground.model.result.AppResult;
 import com.shubham.codeplayground.service.ActiveProblemsService;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class ActiveProblemController {
             method = RequestMethod.GET
     )
     public ResponseEntity<AppResult> getLatestUserCodes(@PathVariable UUID id) {
-        return AppResult.success(activeProblemsService.getLatestUserCode(id));
+        return AppResult.success(activeProblemsService.getLatestUserCodeByActiveProblemId(id));
     }
 
     @RequestMapping(
@@ -36,6 +35,6 @@ public class ActiveProblemController {
             method = RequestMethod.GET
     )
     public ResponseEntity<AppResult> getSubmissions(@PathVariable UUID id) {
-        return AppResult.success(activeProblemsService.getSubmissionDTOByUserProblemId(id));
+        return AppResult.success(activeProblemsService.getSubmissionsByActiveProblemId(id));
     }
 }
