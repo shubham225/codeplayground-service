@@ -2,17 +2,16 @@ package com.shubham.codeplayground.model.mapper;
 
 import com.shubham.codeplayground.model.dto.SubmissionDTO;
 import com.shubham.codeplayground.model.entity.Submission;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
-public class SubmissionMapper {
-    public static SubmissionDTO toDto(Submission submission) {
-        return SubmissionDTO.builder()
-                .id(submission.getId())
-                .userProblemId(submission.getActiveProblem().getId())
-                .date(submission.getDate())
-                .language(submission.getLanguage())
-                .memory(submission.getMemoryInBytes())
-                .runtime(submission.getRuntimeInMs())
-                .status(submission.getStatus())
-                .build();
-    }
+@Mapper(componentModel = "spring")
+public interface SubmissionMapper {
+    @Mappings({
+            @Mapping(target = "userProblemId", source = "submission.activeProblem.id"),
+            @Mapping(target = "memory", source = "submission.memoryInBytes"),
+            @Mapping(target = "runtime", source = "submission.runtimeInMs"),
+    })
+    SubmissionDTO toDto(Submission submission);
 }

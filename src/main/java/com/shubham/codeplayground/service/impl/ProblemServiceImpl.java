@@ -9,9 +9,9 @@ import com.shubham.codeplayground.model.entity.User;
 import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.entity.problem.Problem;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
-import com.shubham.codeplayground.model.mapper.CodeMapperNew;
+import com.shubham.codeplayground.model.mapper.CodeMapper;
 import com.shubham.codeplayground.model.mapper.ProblemMapper;
-import com.shubham.codeplayground.model.mapper.ProblemSummeryMapperNew;
+import com.shubham.codeplayground.model.mapper.ProblemSummeryMapper;
 import com.shubham.codeplayground.repository.CodeSnippetRepository;
 import com.shubham.codeplayground.repository.CodingProblemRepository;
 import com.shubham.codeplayground.service.ActiveProblemsService;
@@ -35,9 +35,9 @@ public class ProblemServiceImpl implements ProblemService {
     private final ActiveProblemsService activeProblemsService;
     private final CodeSnippetRepository codeSnippetRepository;
     private final ProblemGeneratorFactory problemGeneratorFactory;
-    private final ProblemSummeryMapperNew problemSummeryMapper;
+    private final ProblemSummeryMapper problemSummeryMapper;
     private final ProblemMapper problemMapper;
-    private final CodeMapperNew codeMapper;
+    private final CodeMapper codeMapper;
 
     @Override
     public List<ProblemSummeryDTO> getAllProblemSummery(String username) {

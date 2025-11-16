@@ -1,18 +1,17 @@
 package com.shubham.codeplayground.model.mapper;
 
 import com.shubham.codeplayground.model.dto.ProblemSummeryDTO;
-import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.entity.problem.Problem;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
-public class ProblemSummeryMapper {
-    public static ProblemSummeryDTO toDto(Problem problem, ProblemStatus status) {
-        return ProblemSummeryDTO.builder()
-                .id(problem.getId())
-                .title(problem.getTitle())
-                .difficulty(problem.getDifficulty())
-                .status(status)
-                .summery("Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.")
-                .build();
-    }
+@Mapper(componentModel = "spring")
+public interface ProblemSummeryMapper {
+    @Mappings({
+            @Mapping(target = "status", source = "status"),
+            @Mapping(target = "summery", source = "problem.descriptionMd")
+    })
+    ProblemSummeryDTO toDto(Problem problem, ProblemStatus status);
 }

@@ -5,7 +5,7 @@ import com.shubham.codeplayground.model.dto.CodeDTO;
 import com.shubham.codeplayground.model.dto.SubmissionDTO;
 import com.shubham.codeplayground.model.entity.ActiveProblem;
 import com.shubham.codeplayground.model.entity.Submission;
-import com.shubham.codeplayground.model.mapper.SubmissionMapperNew;
+import com.shubham.codeplayground.model.mapper.SubmissionMapper;
 import com.shubham.codeplayground.repository.ActiveProblemRepository;
 import com.shubham.codeplayground.service.ActiveProblemsService;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +19,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ActiveProblemsServiceImpl implements ActiveProblemsService {
     private final ActiveProblemRepository activeProblemRepository;
-    private final SubmissionMapperNew submissionMapper;
+    private final SubmissionMapper submissionMapper;
 
     @Override
     public ActiveProblem getActiveProblemByUserAndProblemId(UUID userId, UUID problemID) {
         return activeProblemRepository
                 .findByUserIdAndProblemId(userId, problemID)
-                .orElseThrow(() -> new ActiveProblemNotFoundException(
-                        MessageFormat
-                                .format("Active problem with id {1} for user {0} not found.",userId, problemID)
-                ));
+                .orElse(new ActiveProblem());
     }
 
     @Override
@@ -36,7 +33,8 @@ public class ActiveProblemsServiceImpl implements ActiveProblemsService {
         return activeProblemRepository
                 .findById(id)
                 .orElseThrow(() -> new ActiveProblemNotFoundException(
-                        MessageFormat.format("Active problem with id {0} don't exist.", id)));
+                        MessageFormat.format("Active problem with id {0} don't exist.", id))
+                );
     }
 
     @Override

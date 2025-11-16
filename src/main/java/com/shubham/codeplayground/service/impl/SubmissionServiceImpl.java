@@ -3,7 +3,6 @@ package com.shubham.codeplayground.service.impl;
 import com.shubham.codeplayground.config.properties.AppProperties;
 import com.shubham.codeplayground.exception.CodeExecutionException;
 import com.shubham.codeplayground.exception.SubmissionNotFoundException;
-import com.shubham.codeplayground.exception.ActiveProblemNotFoundException;
 import com.shubham.codeplayground.model.dto.ActionDTO;
 import com.shubham.codeplayground.model.dto.ExecuteReqDTO;
 import com.shubham.codeplayground.model.dto.SubmissionDTO;
@@ -15,6 +14,7 @@ import com.shubham.codeplayground.model.entity.problem.CodingProblem;
 import com.shubham.codeplayground.model.enums.Language;
 import com.shubham.codeplayground.model.enums.ProblemStatus;
 import com.shubham.codeplayground.model.enums.SubmissionStatus;
+import com.shubham.codeplayground.model.mapper.ActionMapper;
 import com.shubham.codeplayground.model.mapper.SubmissionMapper;
 import com.shubham.codeplayground.model.result.CodeRunResult;
 import com.shubham.codeplayground.repository.SubmissionRepository;
@@ -29,8 +29,8 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -42,22 +42,18 @@ public class SubmissionServiceImpl implements SubmissionService {
     private final ProblemService problemService;
     private final CodeRunnerFactory codeRunnerFactory;
     private final AppProperties appProperties;
+    private final SubmissionMapper submissionMapper;
+    private final ActionMapper actionMapper;
 
     @Override
     public ActionDTO submitAndCompileUserCode(SubmitReqDTO submitRequest, String username) {
-        String errorMessage = "Success";
         User user = userService.getUserByUsername(username);
         CodingProblem problem = problemService.getCodingProblemById(submitRequest.getProblemId());
-        ActiveProblem activeProblem = null;
         Language language = submitRequest.getLanguage();
+        ActiveProblem activeProblem = activeProblemsService.getActiveProblemByUserAndProblemId(user.getId(),
+                                                                                               problem.getId());
 
-        try {
-            activeProblem = activeProblemsService.getActiveProblemByUserAndProblemId(
-                    user.getId(),
-                    problem.getId()
-            );
-        } catch (ActiveProblemNotFoundException e) {
-            activeProblem = new ActiveProblem();
+        if (activeProblem.getStatus() == ProblemStatus.OPEN) {
             activeProblem.setUserId(user.getId());
             activeProblem.setProblemId(submitRequest.getProblemId());
             activeProblem.setStatus(ProblemStatus.PENDING);
@@ -65,9 +61,11 @@ public class SubmissionServiceImpl implements SubmissionService {
         }
 
         Submission submission = activeProblem.getSubmissions().stream()
-                .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
-                        || s.getStatus() == SubmissionStatus.IN_PROGRESS
-                        || s.getStatus() == SubmissionStatus.COMPILATION_FAILED) && s.getLanguage() == language))
+                .filter(s -> (
+                        (s.getStatus() == SubmissionStatus.COMPILED
+                                || s.getStatus() == SubmissionStatus.IN_PROGRESS
+                                || s.getStatus() == SubmissionStatus.COMPILATION_FAILED)
+                                && s.getLanguage() == language))
                 .findFirst().orElse(new Submission());
 
         submission.setActiveProblem(activeProblem);
@@ -76,44 +74,43 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         submission = submissionRepository.save(submission);
 
-        SubmissionDTO submissionDTO = SubmissionMapper.toDto(submission);
-
-        return new ActionDTO(submission.getId(), submission.getStatus(), errorMessage, submissionDTO);
+        return actionMapper.toDto(submission, "Success");
     }
 
     @Override
     public ActionDTO executeUserCode(ExecuteReqDTO execRequest) {
-        String errorMessage = "Success";
         ActiveProblem activeProblem = activeProblemsService.getActiveProblemById(execRequest.getUserProblemId());
         Language language = execRequest.getLanguage();
-        Optional<Submission> submissionOptional = activeProblem.getSubmissions()
+        Submission submission = activeProblem.getSubmissions()
                 .stream()
                 .filter(s -> ((s.getStatus() == SubmissionStatus.COMPILED
                         || s.getStatus() == SubmissionStatus.IN_PROGRESS
                         || s.getStatus() == SubmissionStatus.COMPILATION_FAILED) && s.getLanguage() == language))
-                .findFirst();
-        if (submissionOptional.isEmpty())
-            throw new SubmissionNotFoundException("No Active Submission Found, Submit the code first");
-
-        Submission submission = submissionOptional.get();
+                .findFirst()
+                .orElseThrow(() -> new SubmissionNotFoundException("No Active Submission Found, Submit the code first"));
 
         return executeSubmission(submission.getId());
     }
 
     @Override
     public ActionDTO executeSubmission(UUID submissionId) {
-        String errorMessage = "Success";
-        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() -> new SubmissionNotFoundException("No Active Submission Found, Submit the code first"));
+        String message = "Success";
+        Submission submission = getSubmissionById(submissionId);
         ActiveProblem activeProblem = submission.getActiveProblem();
         CodingProblem problem = problemService.getCodingProblemById(activeProblem.getProblemId());
         User user = userService.getUserById(activeProblem.getUserId());
 
-        Path userDirectory = Paths.get(appProperties.getHomeDir(), user.getUsername());
+        String homeDir = appProperties.getHomeDir();
+        if (homeDir == null || homeDir.isBlank()) {
+            throw new IllegalStateException("homeDir is not configured in application properties");
+        }
+
+        Path userDirectory = Paths.get(homeDir, user.getUsername());
 
         CodeRunner codeRunner = codeRunnerFactory.getCodeRunner(getCodeRunnerType(submission.getLanguage()));
         try {
             CodeRunResult result = codeRunner.validateSubmission(submission, problem, userDirectory.toString());
-            errorMessage = result.getMessage();
+            message = result.getMessage();
             submission.setStatus(result.getStatus());
             submission.setRuntimeInMs(result.getRuntimeInMs());
             submission.setMemoryInBytes(result.getMemoryInBytes());
@@ -124,14 +121,20 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         submission = submissionRepository.save(submission);
 
-        if (submission.getStatus() == SubmissionStatus.ACCEPTED)
+        if (submission.getStatus() == SubmissionStatus.ACCEPTED){
             activeProblem.setStatus(ProblemStatus.SOLVED);
+            activeProblemsService.saveActiveProblem(activeProblem);
+        }
 
-        activeProblem = activeProblemsService.saveActiveProblem(activeProblem);
+        return actionMapper.toDto(submission, message);
+    }
 
-        SubmissionDTO submissionDTO = SubmissionMapper.toDto(submission);
-
-        return new ActionDTO(submission.getId(), submission.getStatus(), errorMessage, submissionDTO);
+    private Submission getSubmissionById(UUID id) {
+        return submissionRepository
+                .findById(id)
+                .orElseThrow(() -> new SubmissionNotFoundException(
+                        MessageFormat.format("Active problem with id {0} not found.", id))
+                );
     }
 
     private String getCodeRunnerType(Language language) {
@@ -143,7 +146,6 @@ public class SubmissionServiceImpl implements SubmissionService {
                 return "JAVASCRIPT";
             }
         }
-
         return "JAVA";
     }
 }

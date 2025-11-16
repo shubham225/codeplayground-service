@@ -11,7 +11,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(componentModel = "spring",
-        uses = { CodeMapperNew.class, SubmissionMapper.class },
+        uses = { CodeMapper.class, SubmissionMapper.class },
         imports = { java.util.stream.Collectors.class, ProblemStatus.class })
 public interface ProblemMapper {
     @Mappings({
@@ -26,8 +26,7 @@ public interface ProblemMapper {
             @Mapping(target = "codeSnippets", source = "problem.codeSnippets"),
 
             // Submissions (set, may be null)
-            @Mapping(target = "submissions", expression =
-                    "java(activeProblem != null ? activeProblem.getSubmissions().stream().map(SubmissionMapper::toDto).collect(Collectors.toSet()) : new java.util.HashSet<>())")
+            @Mapping(target = "submissions", source = "activeProblem.submissions")
     })
     ProblemDTO toDto(CodingProblem problem, ActiveProblem activeProblem);
 

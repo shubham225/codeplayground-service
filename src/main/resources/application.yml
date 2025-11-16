@@ -1,6 +1,6 @@
 # Application Properties
 app:
-  home-dir: /home/shubham-shinde/Temporary/CodingAppData
+  home-dir: ${HOME_DIRECTORY}
 
 # Application Info
 info:
