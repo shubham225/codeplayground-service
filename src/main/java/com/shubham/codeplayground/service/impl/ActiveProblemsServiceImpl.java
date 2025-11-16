@@ -1,6 +1,6 @@
 package com.shubham.codeplayground.service.impl;
 
-import com.shubham.codeplayground.exception.UserProblemNotFoundException;
+import com.shubham.codeplayground.exception.ActiveProblemNotFoundException;
 import com.shubham.codeplayground.model.dto.CodeDTO;
 import com.shubham.codeplayground.model.dto.SubmissionDTO;
 import com.shubham.codeplayground.model.entity.ActiveProblem;
@@ -25,7 +25,7 @@ public class ActiveProblemsServiceImpl implements ActiveProblemsService {
     public ActiveProblem getActiveProblemByUserAndProblemId(UUID userId, UUID problemID) {
         return activeProblemRepository
                 .findByUserIdAndProblemId(userId, problemID)
-                .orElseThrow(() -> new UserProblemNotFoundException(
+                .orElseThrow(() -> new ActiveProblemNotFoundException(
                         MessageFormat
                                 .format("Active problem with id {1} for user {0} not found.",userId, problemID)
                 ));
@@ -35,7 +35,7 @@ public class ActiveProblemsServiceImpl implements ActiveProblemsService {
     public ActiveProblem getActiveProblemById(UUID id) {
         return activeProblemRepository
                 .findById(id)
-                .orElseThrow(() -> new UserProblemNotFoundException(
+                .orElseThrow(() -> new ActiveProblemNotFoundException(
                         MessageFormat.format("Active problem with id {0} don't exist.", id)));
     }
 

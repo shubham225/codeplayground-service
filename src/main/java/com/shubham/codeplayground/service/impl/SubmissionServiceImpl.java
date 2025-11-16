@@ -3,7 +3,7 @@ package com.shubham.codeplayground.service.impl;
 import com.shubham.codeplayground.config.properties.AppProperties;
 import com.shubham.codeplayground.exception.CodeExecutionException;
 import com.shubham.codeplayground.exception.SubmissionNotFoundException;
-import com.shubham.codeplayground.exception.UserProblemNotFoundException;
+import com.shubham.codeplayground.exception.ActiveProblemNotFoundException;
 import com.shubham.codeplayground.model.dto.ActionDTO;
 import com.shubham.codeplayground.model.dto.ExecuteReqDTO;
 import com.shubham.codeplayground.model.dto.SubmissionDTO;
@@ -47,7 +47,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     public ActionDTO submitAndCompileUserCode(SubmitReqDTO submitRequest, String username) {
         String errorMessage = "Success";
         User user = userService.getUserByUsername(username);
-        CodingProblem problem = problemService.getProblemById(submitRequest.getProblemId());
+        CodingProblem problem = problemService.getCodingProblemById(submitRequest.getProblemId());
         ActiveProblem activeProblem = null;
         Language language = submitRequest.getLanguage();
 
@@ -56,7 +56,7 @@ public class SubmissionServiceImpl implements SubmissionService {
                     user.getId(),
                     problem.getId()
             );
-        } catch (UserProblemNotFoundException e) {
+        } catch (ActiveProblemNotFoundException e) {
             activeProblem = new ActiveProblem();
             activeProblem.setUserId(user.getId());
             activeProblem.setProblemId(submitRequest.getProblemId());
@@ -105,7 +105,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         String errorMessage = "Success";
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() -> new SubmissionNotFoundException("No Active Submission Found, Submit the code first"));
         ActiveProblem activeProblem = submission.getActiveProblem();
-        CodingProblem problem = problemService.getProblemById(activeProblem.getProblemId());
+        CodingProblem problem = problemService.getCodingProblemById(activeProblem.getProblemId());
         User user = userService.getUserById(activeProblem.getUserId());
 
         Path userDirectory = Paths.get(appProperties.getHomeDir(), user.getUsername());

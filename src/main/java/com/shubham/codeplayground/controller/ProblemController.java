@@ -25,7 +25,7 @@ public class ProblemController {
             path = "",
             method = RequestMethod.GET
     )
-    public ResponseEntity<AppResult> getAllProblems(Principal principal) {
+    public ResponseEntity<AppResult> getAllCodingProblemSummery(Principal principal) {
         String username = (principal != null) ? principal.getName() : "guest";
         return AppResult.success(problemService.getAllProblemSummery(username));
     }
@@ -55,13 +55,5 @@ public class ProblemController {
     public ResponseEntity<AppResult> addCodeSnippet(@PathVariable UUID id,
                                                     @RequestBody CreateCodeSnippetDTO codeInfoDTO) {
         return AppResult.created(problemService.addCodeSnippet(id, codeInfoDTO));
-    }
-
-    @RequestMapping(
-            path = "/{id}/testcases",
-            method = RequestMethod.POST
-    )
-    public ResponseEntity<AppResult> addTestCases(@PathVariable UUID id) {
-        return AppResult.created(problemService.addTestCases(id));
     }
 }

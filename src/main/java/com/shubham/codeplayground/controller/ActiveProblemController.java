@@ -26,7 +26,7 @@ public class ActiveProblemController {
             path = "{id}/code",
             method = RequestMethod.GET
     )
-    public ResponseEntity<AppResult> getLatestUserCodes(@PathVariable UUID id) {
+    public ResponseEntity<AppResult> getLatestUserCode(@PathVariable UUID id) {
         return AppResult.success(activeProblemsService.getLatestUserCodeByActiveProblemId(id));
     }
 
@@ -34,7 +34,7 @@ public class ActiveProblemController {
             path = "{id}/submissions",
             method = RequestMethod.GET
     )
-    public ResponseEntity<AppResult> getSubmissions(@PathVariable UUID id) {
+    public ResponseEntity<AppResult> getLatestSubmissions(@PathVariable UUID id) {
         return AppResult.success(activeProblemsService.getSubmissionsByActiveProblemId(id));
     }
 }
