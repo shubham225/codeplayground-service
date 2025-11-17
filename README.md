@@ -53,6 +53,17 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
     ```
    http://localhost:8080
    ```
+## 🔧 Environment Variables
+
+The following environment variables must be set for the application to run correctly:
+
+| Variable        | Description                                  | Example Value                                      |
+|-----------------|----------------------------------------------|----------------------------------------------------|
+| `DATASOURCE_URL` | JDBC URL for Database                        | `jdbc:mariadb://localhost:3306/coding_test`        |
+| `DB_USER`        | Database username                            | `root`                                             |
+| `DB_PASSWORD`    | Database password                            | `mypassword`                                       |
+| `HOME_DIRECTORY` | Directory to store user files and workspaces | `/var/codeplayground` or `C:\codeplayground`       |
+
 
 ## 🌐 API Endpoints
 
@@ -62,7 +73,6 @@ communicates with the frontend via a RESTful API and stores data using **MariaDB
 - **POST /api/v1/problems**: Add a new coding problem
 - **GET /api/v1/problems/{id}**: Get a problem by Id
 - **POST /api/v1/problems/{id}/codeSnippets**: add code snippets associated with a problem
-- **POST /api/v1/problems/{id}/testcases**: add testcases for a problem statement
 
 ### Code Execution
 

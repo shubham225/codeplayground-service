@@ -39,7 +39,6 @@ public class CodeExecutorServiceImpl implements CodeExecutorService {
         return output;
     }
 
-    // TODO: Reformat this code for general purpose
     private CodeExecutorResult executeCodeInDocker(String execDirPath,
                                                    String compiler,
                                                    String action) throws IOException, InterruptedException {

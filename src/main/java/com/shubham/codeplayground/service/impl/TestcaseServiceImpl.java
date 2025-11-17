@@ -1,6 +1,8 @@
 package com.shubham.codeplayground.service.impl;
 
 import com.shubham.codeplayground.exception.InvalidTestcaseFormatException;
+import com.shubham.codeplayground.exception.TestCaseNotFoundException;
+import com.shubham.codeplayground.model.dto.FileDTO;
 import com.shubham.codeplayground.model.entity.Testcase;
 import com.shubham.codeplayground.service.StorageService;
 import com.shubham.codeplayground.service.TestcaseService;
@@ -9,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +23,16 @@ public class TestcaseServiceImpl implements TestcaseService {
     @Override
     public List<Testcase> parseTestcasesFromFile(UUID id) {
         return parseTestcasesFromBuffer(storageService.getDatabaseFileContentsAsString(id));
+    }
+
+    @Override
+    public List<Testcase> parseTestcasesFromFileDtos(Set<FileDTO> files) {
+        if (files.isEmpty())
+            throw new TestCaseNotFoundException("Testcases not found in request");
+
+        return files.stream()
+                .flatMap(file -> parseTestcasesFromFile(file.getId()).stream())
+                .collect(Collectors.toList());
     }
 
     @Override

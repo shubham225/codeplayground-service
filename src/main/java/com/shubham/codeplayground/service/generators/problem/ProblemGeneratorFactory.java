@@ -4,6 +4,7 @@ import com.shubham.codeplayground.model.enums.Language;
 import com.shubham.codeplayground.service.execution.runner.CodeRunner;
 import org.springframework.stereotype.Component;
 
+import java.text.MessageFormat;
 import java.util.Map;
 
 @Component
@@ -18,7 +19,9 @@ public class ProblemGeneratorFactory {
         ProblemGenerator problemGenerator = problemGeneratorMap.get(type);
 
         if (problemGenerator == null) {
-            throw new IllegalArgumentException("No such problem type found");
+            throw new IllegalArgumentException(
+                    MessageFormat.format("Problem generator for problem type: {0} is not implemented", type)
+            );
         }
 
         return problemGenerator;

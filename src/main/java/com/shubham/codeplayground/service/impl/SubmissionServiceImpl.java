@@ -5,7 +5,6 @@ import com.shubham.codeplayground.exception.CodeExecutionException;
 import com.shubham.codeplayground.exception.SubmissionNotFoundException;
 import com.shubham.codeplayground.model.dto.ActionDTO;
 import com.shubham.codeplayground.model.dto.ExecuteReqDTO;
-import com.shubham.codeplayground.model.dto.SubmissionDTO;
 import com.shubham.codeplayground.model.dto.SubmitReqDTO;
 import com.shubham.codeplayground.model.entity.ActiveProblem;
 import com.shubham.codeplayground.model.entity.Submission;
@@ -37,13 +36,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SubmissionServiceImpl implements SubmissionService {
     private final ActiveProblemsService activeProblemsService;
-    private final UserService userService;
     private final SubmissionRepository submissionRepository;
     private final ProblemService problemService;
-    private final CodeRunnerFactory codeRunnerFactory;
+    private final UserService userService;
     private final AppProperties appProperties;
-    private final SubmissionMapper submissionMapper;
     private final ActionMapper actionMapper;
+    private final CodeRunnerFactory codeRunnerFactory;
 
     @Override
     public ActionDTO submitAndCompileUserCode(SubmitReqDTO submitRequest, String username) {

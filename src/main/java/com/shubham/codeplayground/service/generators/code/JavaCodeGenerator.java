@@ -16,7 +16,8 @@ public class JavaCodeGenerator implements CodeGenerator{
         sb.append("public class Driver {\n");
         sb.append("\tpublic static void main(String[] args) {\n");
         sb.append("\t\t\tint argIndex = 0;\n");
-        // ---- Identify and run loop for testcases
+
+        // Identify and run loop for testcases
         sb.append("\t\t\tint testcases = Integer.parseInt(args[argIndex++]);\n");
         sb.append("\t\t\twhile (testcases > 0) {\n");
         sb.append("\t\t\t\ttestcases--;\n");
@@ -35,7 +36,7 @@ public class JavaCodeGenerator implements CodeGenerator{
             }
         }
 
-        // ---- Function call ----
+        // Function call
         sb.append("\t\t\t\tSolution solution = new Solution();\n");
 
         boolean hasReturn = codeStub.getReturnType() != null && !"void".equalsIgnoreCase(codeStub.getReturnType());
@@ -57,7 +58,7 @@ public class JavaCodeGenerator implements CodeGenerator{
         sb.append(String.join(", ", paramNames));
         sb.append(");\n");
 
-        // ---- Print result ----
+        // Print result, this will be picked up by process output-stream
         if (hasReturn) {
             if (codeStub.isReturnisArray()) {
                 sb.append("\t\t\t\tSystem.out.println(Arrays.toString(result));\n");
@@ -108,16 +109,17 @@ public class JavaCodeGenerator implements CodeGenerator{
             params.add(paramType + " " + p.getName());
         }
 
-        sb.append("    public ").append(returnType).append(" ")
+        sb.append("\tpublic ").append(returnType).append(" ")
                 .append(codeStub.getFunctionName()).append("(")
                 .append(String.join(", ", params))
                 .append(") {\n");
 
-        sb.append("        // Write your code here\n");
+        sb.append("\t\t// Write your code here\n");
+        sb.append("\t\treturn ")
+                .append(getDefaultReturn(codeStub.getReturnType(), codeStub.isReturnisArray()))
+                .append(";\n");
 
-        sb.append("        return ").append(getDefaultReturn(codeStub.getReturnType(), codeStub.isReturnisArray())).append(";\n");
-
-        sb.append("    }\n");
+        sb.append("\t}\n");
         sb.append("}\n");
 
         return sb.toString();

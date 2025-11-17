@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,19 +19,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-
-        if (user.isEmpty()) throw new UserNotFoundException("User with name '" + username + "' not found");
-
-        return user.get();
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new UserNotFoundException(
+                        MessageFormat.format("User with name {0} not found", username))
+        );
     }
 
     @Override
     public User getUserById(UUID id) {
-        Optional<User> user = userRepository.findById(id);
-
-        if (user.isEmpty()) throw new UserNotFoundException("User with id '" + id + "' not found");
-
-        return user.get();
+        return userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException(
+                        MessageFormat.format("User with id {0} not found", id))
+        );
     }
 }

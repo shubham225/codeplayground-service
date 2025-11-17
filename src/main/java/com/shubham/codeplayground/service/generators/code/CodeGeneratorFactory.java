@@ -3,6 +3,7 @@ package com.shubham.codeplayground.service.generators.code;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.text.MessageFormat;
 import java.util.Map;
 
 @Component
@@ -10,11 +11,13 @@ import java.util.Map;
 public class CodeGeneratorFactory {
     private final Map<String, CodeGenerator> codeGeneratorMap;
 
-    public CodeGenerator getCodeGenerator(String key) {
-        CodeGenerator codeGenerator = codeGeneratorMap.get(languageToGeneratorMap(key));
+    public CodeGenerator getCodeGenerator(String language) {
+        CodeGenerator codeGenerator = codeGeneratorMap.get(languageToGeneratorMap(language));
 
         if (codeGenerator == null) {
-            throw new RuntimeException("Code Generator not Found");
+            throw new RuntimeException(
+                    MessageFormat.format("Code generator for language {0} not implemented", language)
+            );
         }
 
         return codeGenerator;

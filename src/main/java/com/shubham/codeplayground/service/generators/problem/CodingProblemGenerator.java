@@ -1,5 +1,6 @@
 package com.shubham.codeplayground.service.generators.problem;
 
+import com.shubham.codeplayground.exception.TestCaseNotFoundException;
 import com.shubham.codeplayground.model.dto.CreateProblemDTO;
 import com.shubham.codeplayground.model.dto.FileDTO;
 import com.shubham.codeplayground.model.entity.CodeSnippet;
@@ -28,49 +29,49 @@ public class CodingProblemGenerator implements ProblemGenerator {
 
     @Override
     public Problem generate(CreateProblemDTO createProblemDTO) {
-        // TODO: for now only first testcase is read, read all array of Testcase files in future
-        UUID fileId = createProblemDTO.getTestcases().stream().map(FileDTO::getId).findFirst().get();
-        List<Testcase> testcases = testcaseService.parseTestcasesFromFile(fileId);
         String[] languages = createProblemDTO.getLanguages();
+        List<Testcase> testcases = testcaseService.parseTestcasesFromFileDtos(createProblemDTO.getTestcases());
 
-        // TODO: for now only first solution is read, read all array of Solutions files in future
-        UUID solutionFileId = createProblemDTO.getSolutions().stream().map(FileDTO::getId).findFirst().get();
-        String solution = storageService.getDatabaseFileContentsAsString(solutionFileId);
+        /*
+        * TODO: for now solution file is optional and only first solution is read,
+        *  read all array of Solutions files in future
+        */
+        UUID solutionFileId = createProblemDTO.getSolutions().stream()
+                                    .map(FileDTO::getId).findFirst().orElse(null);
+
+        String solution = "";
+        if (solutionFileId != null) solution = storageService.getDatabaseFileContentsAsString(solutionFileId);
+
         List<CodeSnippet> codeSnippets = new ArrayList<>();
 
         for (String s : languages) {
             try {
                 Language language = Language.valueOf(s.toUpperCase());
                 CodeSnippet snippet = codeSnippetService.generateSnippet(language, createProblemDTO.getCodeStub(), solution);
-                // TODO: if code snippet is not validated array is null will give fatal error
+
                 if (codeSnippetService.validate(snippet, testcases)) {
                     codeSnippets.add(snippet);
                 }
             } catch (IllegalArgumentException e) {
-                System.out.println("Language not found in Languages: " + e.getMessage());
+                System.out.println("Language '" + s +"' not supported, skipping the code generation: " + e.getMessage());
             }
         }
 
         CodingProblem codingProblem = getCodingProblem(createProblemDTO, testcases, codeSnippets);
-
-        codingProblem = codingProblemRepository.save(codingProblem);
-
-        return codingProblem;
+        return codingProblemRepository.save(codingProblem);
     }
 
     private CodingProblem getCodingProblem(CreateProblemDTO createProblemDTO,
                                            List<Testcase> testcases,
                                            List<CodeSnippet> codeSnippets) {
         CodingProblem codingProblem = new CodingProblem();
-        // TODO: insert details in coding object
+
         codingProblem.setTitle(createProblemDTO.getTitle());
         codingProblem.setDescriptionMd(createProblemDTO.getDescriptionMd());
         codingProblem.setDifficulty(createProblemDTO.getDifficulty());
         codingProblem.setMaxExecutionTime(createProblemDTO.getMaxExecutionTime());
-
         codingProblem.addAllTestcases(testcases);
         codingProblem.addAllCodeSnippets(codeSnippets);
-
         codingProblem.setIsActive(true);
 
         return codingProblem;

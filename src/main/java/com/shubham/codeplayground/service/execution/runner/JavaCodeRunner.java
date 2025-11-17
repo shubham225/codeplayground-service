@@ -1,5 +1,6 @@
 package com.shubham.codeplayground.service.execution.runner;
 
+import com.shubham.codeplayground.exception.CodeSnippetNotFoundException;
 import com.shubham.codeplayground.model.entity.CodeSnippet;
 import com.shubham.codeplayground.model.entity.Submission;
 import com.shubham.codeplayground.model.entity.Testcase;
@@ -9,7 +10,6 @@ import com.shubham.codeplayground.model.enums.SubmissionStatus;
 import com.shubham.codeplayground.model.helper.LanguageProperties;
 import com.shubham.codeplayground.model.result.CodeExecutorResult;
 import com.shubham.codeplayground.model.result.CodeRunResult;
-import com.shubham.codeplayground.service.ProblemService;
 import com.shubham.codeplayground.service.execution.executor.CodeExecutorService;
 import com.shubham.codeplayground.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +21,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @Component("JAVA")
 @RequiredArgsConstructor
@@ -53,7 +53,7 @@ public class JavaCodeRunner implements CodeRunner {
             }
         }
 
-        if (current.length() > 0)
+        if (!current.isEmpty())
             addParam(result, current.toString().trim());
 
         return String.join(" ", result);
@@ -179,23 +179,23 @@ public class JavaCodeRunner implements CodeRunner {
 
     @Override
     public CodeRunResult validateSubmission(Submission submission, CodingProblem problem, String userHome) {
-        List<Testcase> testcases = problem.getTestCases();
-        CodeSnippet codeSnippet = problem.getCodeSnippets().stream()
-                .filter(snippet -> snippet.getLanguage() == submission.getLanguage())
-                .findFirst()
-                .orElse(null);
-
+        String className = "Driver";
+        String solutionClassName = "Solution";
         CodeRunResult result = new CodeRunResult();
         result.setStatus(SubmissionStatus.IN_PROGRESS);
 
-        String className = "Driver";
-        String solutionClassName = "Solution";
+        CodeSnippet codeSnippet = problem.getCodeSnippets().stream()
+                .filter(snippet -> snippet.getLanguage() == submission.getLanguage())
+                .findFirst()
+                .orElseThrow(() -> new CodeSnippetNotFoundException(
+                        MessageFormat.format("Code snippet for language {0} not found",submission.getLanguage()))
+                );
 
-        assert codeSnippet != null;
         FileUtils.createFileWithContents(Paths.get(userHome, (className + ".java")).toString(), codeSnippet.getDriverCode());
         FileUtils.createFileWithContents(Paths.get(userHome, (solutionClassName + ".java")).toString(), submission.getCode());
 
-        CodeExecutorResult output = codeExecutorService.compileCode(className + ".java", "", userHome, getLanguageProperties());
+        CodeExecutorResult output = codeExecutorService.compileCode(className + ".java", "",
+                                                                              userHome, getLanguageProperties());
 
         if (!output.isSuccess()) {
             result.setStatus(SubmissionStatus.COMPILATION_FAILED);
@@ -208,7 +208,7 @@ public class JavaCodeRunner implements CodeRunner {
         }
 
         // TODO: execute will return testcase output
-        for (Testcase t : testcases) {
+        for (Testcase t : problem.getTestCases()) {
             String arguments = String.join(" ", "1", convertParams(t.getTestcase()));
             output = codeExecutorService.executeCode(className, arguments, userHome, getLanguageProperties());
 
@@ -228,6 +228,8 @@ public class JavaCodeRunner implements CodeRunner {
                 result.setMessage("Test Case failed: \n\n" + "Your Answer: " + output.getOutput().get(0) + " Correct Answer: " + t.getAnswer());
                 result.setMemoryInBytes(output.getMemoryUsage());
                 result.setRuntimeInMs(output.getExecTime());
+                deleteDirectory(new File(userHome));
+
                 return result;
             }
 
