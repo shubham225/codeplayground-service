@@ -1,13 +1,11 @@
 package com.shubham.codeplayground.model.result;
 
 import com.shubham.codeplayground.model.enums.SubmissionStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CodeRunResult {
