@@ -73,6 +73,9 @@ The following environment variables must be set for the application to run corre
 - **POST /api/v1/problems**: Add a new coding problem
 - **GET /api/v1/problems/{id}**: Get a problem by Id
 - **POST /api/v1/problems/{id}/codeSnippets**: add code snippets associated with a problem
+- **GET /api/v1/activeProblems/{id}/code**: Get latest code from active problem
+- **GET /api/v1/activeProblems/{id}/submissions**: Get all submissions of an active problem
+- **POST /api/v1/files/upload**: Uploads a file in database
 
 ### Code Execution
 
